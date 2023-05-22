@@ -10,7 +10,10 @@ ApplicationWindow {
     title: 'AutoNota - Desenvolvido por Erick Ruh Cardozo'
     header: ToolBar {
         ToolButton {
-            text: 'Usuários'
+            focusPolicy: Qt.NoFocus
+            icon.source: 'qrc:/Assets/Icons/users.svg'
+            ToolTip.visible: hovered
+            ToolTip.text: 'Usuários'
             onClicked: usersDialogLoader.active = true
         }
     }
@@ -23,6 +26,24 @@ ApplicationWindow {
         Connections {
             target: usersDialogLoader.item
             function onClosing() { usersDialogLoader.active = false }
+        }
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 5
+
+        TextField {
+            Layout.fillWidth: true
+            placeholderText: 'Chave de Acesso'
+            focus: true
+        }
+
+        WebEngineView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            enabled: false
+            url: 'about:blank'
         }
     }
 }

@@ -1,15 +1,16 @@
 import QtQuick
-import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 import AutoNota
 
-Window {
+ApplicationWindow {
     id: dialog
     width: 400
+    height: 225
     visible: true
     modality: Qt.ApplicationModal
     title: 'Criar Novo Usuário'
+
     property var usersModel: undefined
     property bool canSave: nameField.acceptableInput && ssnField.acceptableInput && passwordField.acceptableInput
 

@@ -47,16 +47,3 @@ void User::setPassword(const QString &newPassword)
     m_password = newPassword;
     emit passwordChanged();
 }
-
-bool User::checked() const
-{
-    return m_checked;
-}
-
-void User::setChecked(bool newChecked)
-{
-    if (m_checked == newChecked)
-        return;
-    m_checked = newChecked;
-    emit checkedChanged();
-}

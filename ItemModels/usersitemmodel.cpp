@@ -14,6 +14,11 @@ UsersItemModel::UsersItemModel(QObject *parent)
     loadUsers();
 }
 
+UsersItemModel::~UsersItemModel()
+{
+    saveUsers();
+}
+
 QVariant UsersItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     switch (section) {
@@ -64,8 +69,8 @@ QVariant UsersItemModel::data(const QModelIndex &index, int role) const
         case PasswordRole:
             return user->password();
 
-        case CheckedRole:
-            return user->checked();
+        case ObjectRole:
+            return QVariant::fromValue(user);
     }
 
     return QVariant();
@@ -87,10 +92,6 @@ bool UsersItemModel::setData(const QModelIndex &index, const QVariant &value, in
 
             case PasswordRole:
                 user->setPassword(value.toString());
-                break;
-
-            case CheckedRole:
-                user->setChecked(value.toBool());
                 break;
         }
 
@@ -115,8 +116,16 @@ QHash<int, QByteArray> UsersItemModel::roleNames() const
         { NameRole, "name" },
         { SsnRole, "ssn" },
         { PasswordRole, "password" },
-        { CheckedRole, "checked" },
+        { ObjectRole, "userObject" }
     };
+}
+
+bool UsersItemModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    beginRemoveRows(QModelIndex(), row, row);
+    m_users.remove(row);
+    endRemoveRows();
+    return true;
 }
 
 void UsersItemModel::addUser(const QString &name, const QString &ssn, const QString &password)
@@ -160,7 +169,7 @@ void UsersItemModel::saveUsers()
 {
     QFile file(FILENAME);
 
-    if (!file.open(QFile::Text | QFile::Truncate)) {
+    if (!file.open(QFile::WriteOnly | QFile::Text | QFile::Truncate)) {
         qCritical("Could not open %s to write", qUtf8Printable(FILENAME));
         return;
     }
@@ -185,13 +194,4 @@ void UsersItemModel::createUsersFile()
     }
 
     file.close();
-}
-
-void UsersItemModel::removeCheckedUsers()
-{
-    for (int i = m_users.size() - 1; i >= 0; --i) {
-        if (m_users.at(i)->checked()) {
-                m_users.removeAt(i);
-        }
-    }
 }
