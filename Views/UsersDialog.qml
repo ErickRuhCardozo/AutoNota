@@ -4,6 +4,8 @@ import QtQuick.Controls
 import AutoNota
 
 ApplicationWindow {
+    id: dialog
+    signal loginRequested(string ssn, string password)
     width: 500
     height: 350
     visible: true
@@ -41,7 +43,8 @@ ApplicationWindow {
                 onClicked: {
                     const index = selectionModel.selectedIndexes[0]
                     const user = usersModel.data(index, UsersItemModel.ObjectRole)
-                    console.log(user.fullName, user.ssn, user.password)
+                    dialog.loginRequested(user.ssn, user.password)
+                    dialog.close()
                 }
             }
         }

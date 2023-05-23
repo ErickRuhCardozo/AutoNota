@@ -26,6 +26,7 @@ qt_add_qml_module(
         SOURCES
             Models/user.h Models/user.cpp
             ItemModels/usersitemmodel.h ItemModels/usersitemmodel.cpp
+            loginmanager.h loginmanager.cpp
 )
 
 qt_add_resources(
@@ -61,7 +62,9 @@ target_link_libraries(
         PRIVATE
             Qt6::Quick
             Qt6::QuickControls2
+            Qt6::WebEngineCore
             Qt6::WebEngineQuick
+            Qt6::WebEngineQuickPrivate # This mf took me 3 hours... Thanks to: https://forum.qt.io/topic/127489/private-headers-access/6
 )
 
 install(

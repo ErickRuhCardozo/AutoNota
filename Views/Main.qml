@@ -2,6 +2,7 @@ import QtQuick
 import QtWebEngine
 import QtQuick.Layouts
 import QtQuick.Controls
+import AutoNota
 
 ApplicationWindow {
     width: 800
@@ -9,13 +10,30 @@ ApplicationWindow {
     visible: true
     title: 'AutoNota - Desenvolvido por Erick Ruh Cardozo'
     header: ToolBar {
-        ToolButton {
-            focusPolicy: Qt.NoFocus
-            icon.source: 'qrc:/Assets/Icons/users.svg'
-            ToolTip.visible: hovered
-            ToolTip.text: 'Usuários'
-            onClicked: usersDialogLoader.active = true
+        RowLayout {
+            anchors.fill: parent
+
+            ToolButton {
+                focusPolicy: Qt.NoFocus
+                icon.source: 'qrc:/Assets/Icons/users.svg'
+                ToolTip.visible: hovered
+                ToolTip.text: 'Usuários'
+                onClicked: usersDialogLoader.active = true
+            }
+
+            BusyIndicator {
+                Layout.alignment: Qt.AlignRight
+                Material.accent: Material.Yellow
+                implicitHeight: parent.height
+                visible: webView.loading
+                running: webView.loading
+            }
         }
+    }
+
+    LoginManager {
+        id: loginManager
+        webView: webView
     }
 
     Loader {
@@ -26,6 +44,9 @@ ApplicationWindow {
         Connections {
             target: usersDialogLoader.item
             function onClosing() { usersDialogLoader.active = false }
+            function onLoginRequested(ssn, password) {
+                loginManager.login(ssn, password)
+            }
         }
     }
 
@@ -40,9 +61,10 @@ ApplicationWindow {
         }
 
         WebEngineView {
+            id: webView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            enabled: false
+//            enabled: false
             url: 'about:blank'
         }
     }
