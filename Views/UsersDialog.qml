@@ -1,3 +1,8 @@
+/*
+ * Author: Erick Ruh Cardozo (https://github.com/erickruhcardozo)
+ * Date: May 19, 2023 - 2:30 PM
+ */
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls

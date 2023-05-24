@@ -1,3 +1,8 @@
+/*
+ * Author: Erick Ruh Cardozo (https://github.com/erickruhcardozo)
+ * Date: May 17, 2023 - 3:33 PM
+ */
+
 #ifndef USERSITEMMODEL_H
 #define USERSITEMMODEL_H
 

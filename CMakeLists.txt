@@ -27,6 +27,7 @@ qt_add_qml_module(
             Models/user.h Models/user.cpp
             ItemModels/usersitemmodel.h ItemModels/usersitemmodel.cpp
             loginmanager.h loginmanager.cpp
+            donator.h donator.cpp
 )
 
 qt_add_resources(

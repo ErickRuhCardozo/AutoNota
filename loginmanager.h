@@ -1,3 +1,8 @@
+/*
+ * Author: Erick Ruh Cardozo (https://github.com/erickruhcardozo)
+ * Date: May 23, 2023 - 2:41 PM
+ */
+
 #ifndef LOGINMANAGER_H
 #define LOGINMANAGER_H
 
@@ -23,23 +28,26 @@ public:
     Q_INVOKABLE void login(QString ssn, QString password);
     Q_INVOKABLE void logout();
 
-private slots:
-    void loadChanged(const QWebEngineLoadingInfo& info);
-
 signals:
     void webViewChanged();
+    void successfullyLoggedIn();
+
+private slots:
+    void loadChanged(const QWebEngineLoadingInfo& info);
 
 private:
     static const QString AUTH_URL;
 
     QQuickWebEngineView *m_webView = nullptr;
     bool m_isLoggedIn;
+    bool m_skipInitializedSessionHandler;
     QString m_currentSsn;
     QString m_currentPassword;
     void (LoginManager::*m_loadedHandler)();
 
     void fillLoginInfo();
-    void checkForInitializedSession();
+    void handleInitializedSession();
+    void checkFinalizedSession();
 };
 
 #endif // LOGINMANAGER_H

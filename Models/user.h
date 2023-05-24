@@ -1,3 +1,7 @@
+/*
+ * Author: Erick Ruh Cardozo (https://github.com/erickruhcardozo)
+ * Date: May 17, 2023 - 2:15 PM
+ */
 #ifndef USER_H
 #define USER_H
 

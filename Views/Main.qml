@@ -1,3 +1,8 @@
+/*
+ * Author: Erick Ruh Cardozo (https://github.com/erickruhcardozo)
+ * Date: May 17, 2023 - 1:53 PM
+ */
+
 import QtQuick
 import QtWebEngine
 import QtQuick.Layouts
@@ -43,7 +48,11 @@ ApplicationWindow {
 
         Connections {
             target: usersDialogLoader.item
-            function onClosing() { usersDialogLoader.active = false }
+
+            function onClosing() {
+                usersDialogLoader.active = false
+            }
+
             function onLoginRequested(ssn, password) {
                 loginManager.login(ssn, password)
             }
@@ -58,6 +67,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             placeholderText: 'Chave de Acesso'
             focus: true
+            text: webView.url
         }
 
         WebEngineView {
@@ -65,7 +75,6 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
 //            enabled: false
-            url: 'about:blank'
         }
     }
 }

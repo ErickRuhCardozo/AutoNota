@@ -1,3 +1,8 @@
+/*
+ * Author: Erick Ruh Cardozo (https://github.com/erickruhcardozo)
+ * Date: May 17, 2023 - 2:22 PM
+ */
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -25,7 +30,7 @@ ApplicationWindow {
             id: nameField
             focus: true
             Layout.fillWidth: true
-            validator: RegularExpressionValidator { regularExpression: /[\w\s]{3,10}/ }
+            validator: RegularExpressionValidator { regularExpression: /[\w\s]{3,30}/ }
         }
 
         Label { text: 'CPF:' }
