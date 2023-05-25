@@ -1,7 +1,0 @@
-module AutoNota
-typeinfo appAutoNota.qmltypes
-prefer :/qt/qml/AutoNota/
-Main 1.0 Views/Main.qml
-UsersDialog 1.0 Views/UsersDialog.qml
-CreateUserDialog 1.0 Views/CreateUserDialog.qml
-

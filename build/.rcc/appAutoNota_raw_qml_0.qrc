@@ -1,8 +1,0 @@
-<RCC>
-  <qresource prefix="/qt/qml/AutoNota/">
-    <file alias="Views/Main.qml">C:/Users/Public/Documents/AutoNota/Views/Main.qml</file>
-    <file alias="Views/UsersDialog.qml">C:/Users/Public/Documents/AutoNota/Views/UsersDialog.qml</file>
-    <file alias="Views/CreateUserDialog.qml">C:/Users/Public/Documents/AutoNota/Views/CreateUserDialog.qml</file>
-  </qresource>
-</RCC>
-
