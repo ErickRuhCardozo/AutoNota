@@ -1,0 +1,169 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-7c41c23c5a48433310e4.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "AutoNota",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint-Debug-3bbb9acc33d1aadbaf49.json",
+					"name" : "all_qmllint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint_json::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint_json-Debug-31834388fba54834343c.json",
+					"name" : "all_qmllint_json",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint_module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint_module-Debug-48352023d1dd3eeff604.json",
+					"name" : "all_qmllint_module",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmltyperegistrations::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmltyperegistrations-Debug-ffd45c11aae88f3d126d.json",
+					"name" : "all_qmltyperegistrations",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appAutoNota::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appAutoNota-Debug-af8075896272b5a6aa09.json",
+					"name" : "appAutoNota",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appAutoNota_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appAutoNota_autogen-Debug-2ac3c3d4e1cdada3d566.json",
+					"name" : "appAutoNota_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appAutoNota_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appAutoNota_autogen_timestamp_deps-Debug-0c757700f6f61326717d.json",
+					"name" : "appAutoNota_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appAutoNota_qmlimportscan::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appAutoNota_qmlimportscan-Debug-7786c84af72ff438bb16.json",
+					"name" : "appAutoNota_qmlimportscan",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appAutoNota_qmllint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appAutoNota_qmllint-Debug-94c4c60504771ba7bd94.json",
+					"name" : "appAutoNota_qmllint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appAutoNota_qmllint_json::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appAutoNota_qmllint_json-Debug-4fc0f5513a5c276caa6f.json",
+					"name" : "appAutoNota_qmllint_json",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appAutoNota_qmllint_module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appAutoNota_qmllint_module-Debug-30142dba2ef14878c6f3.json",
+					"name" : "appAutoNota_qmllint_module",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appAutoNota_qmltyperegistration::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appAutoNota_qmltyperegistration-Debug-f6f2fb36e5feebb84bbf.json",
+					"name" : "appAutoNota_qmltyperegistration",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appAutoNota_tooling::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appAutoNota_tooling-Debug-9c48a1c7a05bd890c19f.json",
+					"name" : "appAutoNota_tooling",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/Public/Documents/AutoNota/build",
+		"source" : "C:/Users/Public/Documents/AutoNota"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

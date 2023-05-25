@@ -1,0 +1,4 @@
+C:/Users/Public/Documents/AutoNota/build/appAutoNota_autogen/include/../25IR5XJDBU/moc_user.cpp.json
+C:/Users/Public/Documents/AutoNota/build/appAutoNota_autogen/include/../EWIEGA46WW/moc_donator.cpp.json
+C:/Users/Public/Documents/AutoNota/build/appAutoNota_autogen/include/../EWIEGA46WW/moc_loginmanager.cpp.json
+C:/Users/Public/Documents/AutoNota/build/appAutoNota_autogen/include/../PH4ZSEXQXY/moc_usersitemmodel.cpp.json

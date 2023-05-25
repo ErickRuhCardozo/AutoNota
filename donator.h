@@ -7,7 +7,9 @@
 #define DONATOR_H
 
 #include <QObject>
+#include <QQueue>
 #include <QQmlEngine>
+#include <QWebEngineLoadingInfo>
 #include <QtWebEngineQuick/private/qquickwebengineview_p.h>
 
 class Donator : public QObject
@@ -15,6 +17,7 @@ class Donator : public QObject
     Q_OBJECT
     QML_ELEMENT
     Q_PROPERTY(QQuickWebEngineView* webView READ webView WRITE setWebView NOTIFY webViewChanged)
+    Q_PROPERTY(QString cnpj READ cnpj WRITE setCnpj NOTIFY cnpjChanged)
 
 public:
     explicit Donator(QObject *parent = nullptr);
@@ -22,17 +25,30 @@ public:
     QQuickWebEngineView *webView() const;
     void setWebView(QQuickWebEngineView *newWebView);
 
+    QString cnpj() const;
+    void setCnpj(const QString &newCnpj);
+
+    Q_INVOKABLE void addAccessKey(const QString& accessKey);
+
 public slots:
-    void startDonations();
+    void prepareForDonations();
+
+private slots:
+    void loadChanged(const QWebEngineLoadingInfo& info);
 
 signals:
     void webViewChanged();
+    void cnpjChanged();
 
 private:
     QQuickWebEngineView *m_webView = nullptr;
+    void (Donator::*m_loadedHandler)();
+    QString m_cnpj;
+    QQueue<QString> m_accessKeys;
 
-    void prepareForDonations();
     bool isInDonationPage();
+    void checkReadyToDonate();
+    void donate();
 };
 
 #endif // DONATOR_H

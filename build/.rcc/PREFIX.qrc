@@ -1,0 +1,10 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="qtquickcontrols2.conf">C:/Users/Public/Documents/AutoNota/qtquickcontrols2.conf</file>
+    <file alias="Assets/Icons/user-plus.svg">C:/Users/Public/Documents/AutoNota/Assets/Icons/user-plus.svg</file>
+    <file alias="Assets/Icons/user-minus.svg">C:/Users/Public/Documents/AutoNota/Assets/Icons/user-minus.svg</file>
+    <file alias="Assets/Icons/user-login.svg">C:/Users/Public/Documents/AutoNota/Assets/Icons/user-login.svg</file>
+    <file alias="Assets/Icons/users.svg">C:/Users/Public/Documents/AutoNota/Assets/Icons/users.svg</file>
+  </qresource>
+</RCC>
+

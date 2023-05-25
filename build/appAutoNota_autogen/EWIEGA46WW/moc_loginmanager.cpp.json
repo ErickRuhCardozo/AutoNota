@@ -1,0 +1,100 @@
+{
+    "classes": [
+        {
+            "classInfos": [
+                {
+                    "name": "QML.Element",
+                    "value": "auto"
+                }
+            ],
+            "className": "LoginManager",
+            "methods": [
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "ssn",
+                            "type": "QString"
+                        },
+                        {
+                            "name": "password",
+                            "type": "QString"
+                        }
+                    ],
+                    "name": "login",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "name": "logout",
+                    "returnType": "void"
+                }
+            ],
+            "object": true,
+            "properties": [
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 0,
+                    "name": "webView",
+                    "notify": "webViewChanged",
+                    "read": "webView",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "QQuickWebEngineView*",
+                    "user": false,
+                    "write": "setWebView"
+                },
+                {
+                    "constant": true,
+                    "designable": true,
+                    "final": false,
+                    "index": 1,
+                    "name": "isLoggedIn",
+                    "read": "isLoggedIn",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "bool",
+                    "user": false
+                }
+            ],
+            "qualifiedClassName": "LoginManager",
+            "signals": [
+                {
+                    "access": "public",
+                    "name": "webViewChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "name": "successfullyLoggedIn",
+                    "returnType": "void"
+                }
+            ],
+            "slots": [
+                {
+                    "access": "private",
+                    "arguments": [
+                        {
+                            "name": "info",
+                            "type": "QWebEngineLoadingInfo"
+                        }
+                    ],
+                    "name": "loadChanged",
+                    "returnType": "void"
+                }
+            ],
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QObject"
+                }
+            ]
+        }
+    ],
+    "inputFile": "loginmanager.h",
+    "outputRevision": 68
+}

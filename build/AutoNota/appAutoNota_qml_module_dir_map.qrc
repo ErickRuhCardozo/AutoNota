@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="/qt/qml/AutoNota">C:/Users/Public/Documents/AutoNota/build/AutoNota</file>
+
+  </qresource>
+</RCC>

@@ -1,0 +1,359 @@
+[
+    {
+        "classes": [
+            {
+                "classInfos": [
+                    {
+                        "name": "QML.Element",
+                        "value": "auto"
+                    }
+                ],
+                "className": "User",
+                "object": true,
+                "properties": [
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 0,
+                        "name": "fullName",
+                        "notify": "fullNameChanged",
+                        "read": "fullName",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "QString",
+                        "user": false,
+                        "write": "setFullName"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 1,
+                        "name": "ssn",
+                        "notify": "ssnChanged",
+                        "read": "ssn",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "QString",
+                        "user": false,
+                        "write": "setSsn"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 2,
+                        "name": "password",
+                        "notify": "passwordChanged",
+                        "read": "password",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "QString",
+                        "user": false,
+                        "write": "setPassword"
+                    }
+                ],
+                "qualifiedClassName": "User",
+                "signals": [
+                    {
+                        "access": "public",
+                        "name": "fullNameChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "name": "ssnChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "name": "passwordChanged",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QObject"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "user.h",
+        "outputRevision": 68
+    },
+    {
+        "classes": [
+            {
+                "classInfos": [
+                    {
+                        "name": "QML.Element",
+                        "value": "auto"
+                    }
+                ],
+                "className": "Donator",
+                "methods": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "accessKey",
+                                "type": "QString"
+                            }
+                        ],
+                        "name": "addAccessKey",
+                        "returnType": "void"
+                    }
+                ],
+                "object": true,
+                "properties": [
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 0,
+                        "name": "webView",
+                        "notify": "webViewChanged",
+                        "read": "webView",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "QQuickWebEngineView*",
+                        "user": false,
+                        "write": "setWebView"
+                    },
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 1,
+                        "name": "cnpj",
+                        "notify": "cnpjChanged",
+                        "read": "cnpj",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "QString",
+                        "user": false,
+                        "write": "setCnpj"
+                    }
+                ],
+                "qualifiedClassName": "Donator",
+                "signals": [
+                    {
+                        "access": "public",
+                        "name": "webViewChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "name": "cnpjChanged",
+                        "returnType": "void"
+                    }
+                ],
+                "slots": [
+                    {
+                        "access": "public",
+                        "name": "prepareForDonations",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "name": "info",
+                                "type": "QWebEngineLoadingInfo"
+                            }
+                        ],
+                        "name": "loadChanged",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QObject"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "donator.h",
+        "outputRevision": 68
+    },
+    {
+        "classes": [
+            {
+                "classInfos": [
+                    {
+                        "name": "QML.Element",
+                        "value": "auto"
+                    }
+                ],
+                "className": "LoginManager",
+                "methods": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "ssn",
+                                "type": "QString"
+                            },
+                            {
+                                "name": "password",
+                                "type": "QString"
+                            }
+                        ],
+                        "name": "login",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "name": "logout",
+                        "returnType": "void"
+                    }
+                ],
+                "object": true,
+                "properties": [
+                    {
+                        "constant": false,
+                        "designable": true,
+                        "final": false,
+                        "index": 0,
+                        "name": "webView",
+                        "notify": "webViewChanged",
+                        "read": "webView",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "QQuickWebEngineView*",
+                        "user": false,
+                        "write": "setWebView"
+                    },
+                    {
+                        "constant": true,
+                        "designable": true,
+                        "final": false,
+                        "index": 1,
+                        "name": "isLoggedIn",
+                        "read": "isLoggedIn",
+                        "required": false,
+                        "scriptable": true,
+                        "stored": true,
+                        "type": "bool",
+                        "user": false
+                    }
+                ],
+                "qualifiedClassName": "LoginManager",
+                "signals": [
+                    {
+                        "access": "public",
+                        "name": "webViewChanged",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "name": "successfullyLoggedIn",
+                        "returnType": "void"
+                    }
+                ],
+                "slots": [
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "name": "info",
+                                "type": "QWebEngineLoadingInfo"
+                            }
+                        ],
+                        "name": "loadChanged",
+                        "returnType": "void"
+                    }
+                ],
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QObject"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "loginmanager.h",
+        "outputRevision": 68
+    },
+    {
+        "classes": [
+            {
+                "classInfos": [
+                    {
+                        "name": "QML.Element",
+                        "value": "auto"
+                    }
+                ],
+                "className": "UsersItemModel",
+                "enums": [
+                    {
+                        "isClass": false,
+                        "isFlag": false,
+                        "name": "UserRole",
+                        "values": [
+                            "NameRole",
+                            "SsnRole",
+                            "PasswordRole",
+                            "ObjectRole"
+                        ]
+                    }
+                ],
+                "methods": [
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "name",
+                                "type": "QString"
+                            },
+                            {
+                                "name": "ssn",
+                                "type": "QString"
+                            },
+                            {
+                                "name": "password",
+                                "type": "QString"
+                            }
+                        ],
+                        "name": "addUser",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "name": "loadUsers",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "name": "saveUsers",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "name": "createUsersFile",
+                        "returnType": "void"
+                    }
+                ],
+                "object": true,
+                "qualifiedClassName": "UsersItemModel",
+                "superClasses": [
+                    {
+                        "access": "public",
+                        "name": "QAbstractTableModel"
+                    }
+                ]
+            }
+        ],
+        "inputFile": "usersitemmodel.h",
+        "outputRevision": 68
+    }
+]

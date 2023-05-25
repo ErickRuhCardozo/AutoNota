@@ -1,0 +1,98 @@
+{
+    "classes": [
+        {
+            "classInfos": [
+                {
+                    "name": "QML.Element",
+                    "value": "auto"
+                }
+            ],
+            "className": "Donator",
+            "methods": [
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "accessKey",
+                            "type": "QString"
+                        }
+                    ],
+                    "name": "addAccessKey",
+                    "returnType": "void"
+                }
+            ],
+            "object": true,
+            "properties": [
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 0,
+                    "name": "webView",
+                    "notify": "webViewChanged",
+                    "read": "webView",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "QQuickWebEngineView*",
+                    "user": false,
+                    "write": "setWebView"
+                },
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 1,
+                    "name": "cnpj",
+                    "notify": "cnpjChanged",
+                    "read": "cnpj",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "QString",
+                    "user": false,
+                    "write": "setCnpj"
+                }
+            ],
+            "qualifiedClassName": "Donator",
+            "signals": [
+                {
+                    "access": "public",
+                    "name": "webViewChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "name": "cnpjChanged",
+                    "returnType": "void"
+                }
+            ],
+            "slots": [
+                {
+                    "access": "public",
+                    "name": "prepareForDonations",
+                    "returnType": "void"
+                },
+                {
+                    "access": "private",
+                    "arguments": [
+                        {
+                            "name": "info",
+                            "type": "QWebEngineLoadingInfo"
+                        }
+                    ],
+                    "name": "loadChanged",
+                    "returnType": "void"
+                }
+            ],
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QObject"
+                }
+            ]
+        }
+    ],
+    "inputFile": "donator.h",
+    "outputRevision": 68
+}
