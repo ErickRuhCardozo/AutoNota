@@ -1,4 +1,5 @@
 #include "loginmanager.h"
+#include "qregularexpression.h"
 #include <qquickwebengine_accessible.h>
 
 const QString LoginManager::AUTH_URL = "https://notaparana.pr.gov.br/nfprweb";
@@ -6,7 +7,7 @@ const QString LoginManager::AUTH_URL = "https://notaparana.pr.gov.br/nfprweb";
 LoginManager::LoginManager(QObject *parent)
     : QObject{parent}
 {
-    this->m_loadedHandler = NULL;
+    m_loadedHandler = NULL;
 }
 
 bool LoginManager::isLoggedIn() const
@@ -25,6 +26,7 @@ void LoginManager::setWebView(QQuickWebEngineView *newWebView)
         return;
 
     m_webView = newWebView;
+    QObject::connect(m_webView, &QQuickWebEngineView::loadingChanged, this, &LoginManager::loadChanged);
     emit webViewChanged();
 }
 
@@ -34,12 +36,11 @@ void LoginManager::login(QString ssn, QString password)
         logout();
     }
 
-    m_currentSsn = ssn;
+    m_currentSsn = ssn.remove(QRegularExpression("[^\\d]"));
     m_currentPassword = password;
     m_isLoggedIn = false;
     m_skipInitializedSessionHandler = false;
-    this->m_loadedHandler = &LoginManager::fillLoginInfo;
-    QObject::connect(m_webView, &QQuickWebEngineView::loadingChanged, this, &LoginManager::loadChanged);
+    m_loadedHandler = &LoginManager::fillLoginInfo;
     m_webView->setUrl(QUrl(AUTH_URL));
 }
 
@@ -53,7 +54,7 @@ void LoginManager::loadChanged(const QWebEngineLoadingInfo& info)
     if (info.status() != QWebEngineLoadingInfo::LoadSucceededStatus)
         return;
 
-    if (this->m_loadedHandler != NULL)
+    if (m_loadedHandler != NULL)
         (this->*m_loadedHandler)();
 }
 
@@ -65,9 +66,9 @@ void LoginManager::fillLoginInfo()
                     .arg(m_currentSsn, m_currentPassword);
 
     if (m_skipInitializedSessionHandler) {
-        this->m_loadedHandler = &LoginManager::checkFinalizedSession;
+        m_loadedHandler = &LoginManager::checkFinalizedSession;
     } else {
-        this->m_loadedHandler = &LoginManager::handleInitializedSession;
+        m_loadedHandler = &LoginManager::handleInitializedSession;
     }
 
     m_webView->runJavaScript(script);
@@ -75,9 +76,15 @@ void LoginManager::fillLoginInfo()
 
 void LoginManager::handleInitializedSession()
 {
-    m_webView->runJavaScript("const btn = document.querySelector('button.button');"
-                             "btn.innerText.startsWith('Encerrar') && btn.click()");
-    this->m_loadedHandler = &LoginManager::checkFinalizedSession;
+    QString url = m_webView->url().toString();
+
+    if (url.contains("nfprweb/ContaCorrente")) { // Session Initialized. Finish it.
+        m_webView->runJavaScript("const btn = document.querySelector('button.button');"
+                                 "btn.innerText.startsWith('Encerrar') && btn.click()");
+        m_loadedHandler = &LoginManager::checkFinalizedSession;
+    } else { // Wrong Login Info. Signalize User.
+        m_webView->runJavaScript("alert('CPF ou Senha Inválidos.\\nRecomenda-se remover o usuário e cadastra-lo novamente com as informações corretas.')");
+    }
 }
 
 void LoginManager::checkFinalizedSession()
