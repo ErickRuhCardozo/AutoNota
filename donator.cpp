@@ -35,6 +35,9 @@ void Donator::setCnpj(const QString &newCnpj)
 
 void Donator::addAccessKey(const QString &accessKey)
 {
+    if (m_accessKeys.size() < 1)
+        m_webView->reload();
+
     m_accessKeys.enqueue(accessKey);
 }
 

@@ -72,10 +72,13 @@ ApplicationWindow {
 
         TextField {
             Layout.fillWidth: true
+            Layout.topMargin: 5
             placeholderText: 'Chave de Acesso'
+            inputMask: '99999999999999999999999999999999999999999999'
             focus: true
             onTextChanged: {
-                if (length === 44) {
+                if (text.length === 44) {
+                    donator.addAccessKey(text)
                     clear()
                 }
             }
@@ -85,7 +88,7 @@ ApplicationWindow {
             id: webView
             Layout.fillWidth: true
             Layout.fillHeight: true
-//            enabled: false
+            enabled: false
         }
     }
 }
