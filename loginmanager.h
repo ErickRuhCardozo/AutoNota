@@ -40,13 +40,13 @@ private:
 
     QQuickWebEngineView *m_webView = nullptr;
     bool m_isLoggedIn;
-    bool m_skipInitializedSessionHandler;
+    bool m_skipCheckAfterLogin;
     QString m_currentSsn;
     QString m_currentPassword;
     void (LoginManager::*m_loadedHandler)();
 
     void fillLoginInfo();
-    void handleInitializedSession();
+    void checkAfterLogin();
     void checkFinalizedSession();
 };
 
