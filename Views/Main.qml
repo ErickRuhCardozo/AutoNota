@@ -84,6 +84,11 @@ ApplicationWindow {
             }
         }
 
+        AlertBox {
+            visible: loginManager.hasLoginErrors
+            message: '<b>CPF ou Senha Inválidos</b><br>Recomenda-se remover o usuário e cadastra-lo novamente com as informações corretas.'
+        }
+
         WebEngineView {
             id: webView
             Layout.fillWidth: true

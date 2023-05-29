@@ -23,6 +23,7 @@ qt_add_qml_module(
             Views/Main.qml
             Views/UsersDialog.qml
             Views/CreateUserDialog.qml
+            Views/AlertBox.qml
         SOURCES
             Models/user.h Models/user.cpp
             ItemModels/usersitemmodel.h ItemModels/usersitemmodel.cpp

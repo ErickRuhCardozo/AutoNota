@@ -5,9 +5,12 @@
 const QString LoginManager::AUTH_URL = "https://notaparana.pr.gov.br/nfprweb/DoacaoDocumentoFiscalCadastrar";
 
 LoginManager::LoginManager(QObject *parent)
-    : QObject{parent}
+    : QObject{parent},
+      m_loadedHandler{nullptr},
+      m_isLoggedIn{false},
+    m_hasLoginErrors{false},
+      m_skipCheckAfterLogin{false}
 {
-    m_loadedHandler = NULL;
 }
 
 bool LoginManager::isLoggedIn() const
@@ -18,6 +21,17 @@ bool LoginManager::isLoggedIn() const
 QQuickWebEngineView *LoginManager::webView() const
 {
     return m_webView;
+}
+
+bool LoginManager::hasLoginErrors() const
+{
+    return m_hasLoginErrors;
+}
+
+void LoginManager::setLoginError(bool error)
+{
+    m_hasLoginErrors = error;
+    emit hasLoginErrorsChanged();
 }
 
 void LoginManager::setWebView(QQuickWebEngineView *newWebView)
@@ -40,13 +54,15 @@ void LoginManager::login(QString ssn, QString password)
     m_currentPassword = password;
     m_isLoggedIn = false;
     m_skipCheckAfterLogin = false;
+    setLoginError(false);
     m_loadedHandler = &LoginManager::fillLoginInfo;
     m_webView->setUrl(QUrl(AUTH_URL));
 }
 
 void LoginManager::logout()
 {
-    // TODO
+    m_isLoggedIn = false;
+    m_webView->runJavaScript("document.querySelector('#user-logout').click()");
 }
 
 void LoginManager::loadChanged(const QWebEngineLoadingInfo& info)
@@ -54,7 +70,7 @@ void LoginManager::loadChanged(const QWebEngineLoadingInfo& info)
     if (info.status() != QWebEngineLoadingInfo::LoadSucceededStatus)
         return;
 
-    if (m_loadedHandler != NULL)
+    if (m_loadedHandler != nullptr)
         (this->*m_loadedHandler)();
 }
 
@@ -83,7 +99,7 @@ void LoginManager::checkAfterLogin()
                                  "btn.innerText.startsWith('Encerrar') && btn.click()");
         m_loadedHandler = &LoginManager::checkFinalizedSession;
     } else { // Wrong Login Info. Signalize User.
-        m_webView->runJavaScript("alert('CPF ou Senha Inválidos.\\nRecomenda-se remover o usuário e cadastra-lo novamente com as informações corretas.')");
+        setLoginError(true);
     }
 }
 
@@ -101,6 +117,7 @@ void LoginManager::checkFinalizedSession()
         m_skipCheckAfterLogin = false;
         m_isLoggedIn = true;
         QObject::disconnect(m_webView, &QQuickWebEngineView::loadingChanged, this, &LoginManager::loadChanged);
+        m_loadedHandler = nullptr;
         emit successfullyLoggedIn();
     }
 }

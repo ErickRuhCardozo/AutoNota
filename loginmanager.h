@@ -17,6 +17,7 @@ class LoginManager : public QObject
     QML_ELEMENT
     Q_PROPERTY(QQuickWebEngineView* webView READ webView WRITE setWebView NOTIFY webViewChanged)
     Q_PROPERTY(bool isLoggedIn READ isLoggedIn CONSTANT)
+    Q_PROPERTY(bool hasLoginErrors READ hasLoginErrors NOTIFY hasLoginErrorsChanged)
 
 public:
     explicit LoginManager(QObject *parent = nullptr);
@@ -28,9 +29,12 @@ public:
     Q_INVOKABLE void login(QString ssn, QString password);
     Q_INVOKABLE void logout();
 
+    bool hasLoginErrors() const;
+
 signals:
     void webViewChanged();
     void successfullyLoggedIn();
+    void hasLoginErrorsChanged();
 
 private slots:
     void loadChanged(const QWebEngineLoadingInfo& info);
@@ -41,6 +45,7 @@ private:
     QQuickWebEngineView *m_webView = nullptr;
     bool m_isLoggedIn;
     bool m_skipCheckAfterLogin;
+    bool m_hasLoginErrors;
     QString m_currentSsn;
     QString m_currentPassword;
     void (LoginManager::*m_loadedHandler)();
@@ -48,6 +53,7 @@ private:
     void fillLoginInfo();
     void checkAfterLogin();
     void checkFinalizedSession();
+    void setLoginError(bool error);
 };
 
 #endif // LOGINMANAGER_H
