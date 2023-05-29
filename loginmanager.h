@@ -43,6 +43,7 @@ private:
     static const QString AUTH_URL;
 
     QQuickWebEngineView *m_webView = nullptr;
+    QJSEngine m_engine;
     bool m_isLoggedIn;
     bool m_skipCheckAfterLogin;
     bool m_hasLoginErrors;

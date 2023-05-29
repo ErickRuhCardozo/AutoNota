@@ -1,6 +1,6 @@
 #include "loginmanager.h"
-#include "qregularexpression.h"
-#include <qquickwebengine_accessible.h>
+#include <QRegularExpression>
+#include <QTimer>
 
 const QString LoginManager::AUTH_URL = "https://notaparana.pr.gov.br/nfprweb/DoacaoDocumentoFiscalCadastrar";
 
@@ -50,7 +50,8 @@ void LoginManager::login(QString ssn, QString password)
         logout();
     }
 
-    m_currentSsn = ssn.remove(QRegularExpression("[^\\d]"));
+    static QRegularExpression regex("[^\\d]");
+    m_currentSsn = ssn.remove(regex);
     m_currentPassword = password;
     m_isLoggedIn = false;
     m_skipCheckAfterLogin = false;
@@ -92,15 +93,28 @@ void LoginManager::fillLoginInfo()
 
 void LoginManager::checkAfterLogin()
 {
-    QString url = m_webView->url().toString();
+//    QString url = m_webView->url().toString();
 
-    if (url.contains("nfprweb/DoacaoDocumentoFiscalCadastrar")) { // Session Initialized. Finish it.
-        m_webView->runJavaScript("const btn = document.querySelector('button.button');"
-                                 "btn.innerText.startsWith('Encerrar') && btn.click()");
-        m_loadedHandler = &LoginManager::checkFinalizedSession;
-    } else { // Wrong Login Info. Signalize User.
-        setLoginError(true);
-    }
+//    if (url.contains("nfprweb/DoacaoDocumentoFiscalCadastrar")) { // Session Initialized. Finish it.
+//        m_webView->runJavaScript("const btn = document.querySelector('button.button');"
+//                                 "btn.innerText.startsWith('Encerrar') && btn.click()");
+//        m_loadedHandler = &LoginManager::checkFinalizedSession;
+//    } else { // Wrong Login Info. Signalize User.
+//        setLoginError(true);
+//    }
+    QJSValue callback = m_engine.evaluate("(function(result) { isSessionInitialized = result; })");
+    m_webView->runJavaScript("(function() {"
+                             "  const btn = document.querySelector('button.button');"
+                             "  if (btn.innerText.startsWith('Encerrar')) {"
+                             "      btn.click();"
+                             "      return true;"
+                             "  } else {"
+                             "      return false;"
+                             "  }"
+                             "})()", callback);
+    QTimer::singleShot(500, this, [this]() {
+        qDebug() << m_engine.globalObject().property("isSessionInitialized").toString();
+    });
 }
 
 void LoginManager::checkFinalizedSession()
