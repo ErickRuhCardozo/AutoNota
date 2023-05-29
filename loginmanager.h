@@ -45,15 +45,13 @@ private:
     QQuickWebEngineView *m_webView = nullptr;
     QJSEngine m_engine;
     bool m_isLoggedIn;
-    bool m_skipCheckAfterLogin;
     bool m_hasLoginErrors;
     QString m_currentSsn;
     QString m_currentPassword;
     void (LoginManager::*m_loadedHandler)();
 
     void fillLoginInfo();
-    void checkAfterLogin();
-    void checkFinalizedSession();
+    void checkAfterLoginAttempt();
     void setLoginError(bool error);
 };
 

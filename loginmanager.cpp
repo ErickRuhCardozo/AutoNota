@@ -8,8 +8,7 @@ LoginManager::LoginManager(QObject *parent)
     : QObject{parent},
       m_loadedHandler{nullptr},
       m_isLoggedIn{false},
-    m_hasLoginErrors{false},
-      m_skipCheckAfterLogin{false}
+      m_hasLoginErrors{false}
 {
 }
 
@@ -40,24 +39,23 @@ void LoginManager::setWebView(QQuickWebEngineView *newWebView)
         return;
 
     m_webView = newWebView;
-    QObject::connect(m_webView, &QQuickWebEngineView::loadingChanged, this, &LoginManager::loadChanged);
     emit webViewChanged();
 }
 
 void LoginManager::login(QString ssn, QString password)
 {
-    if (m_isLoggedIn) {
-        logout();
-    }
-
     static QRegularExpression regex("[^\\d]");
     m_currentSsn = ssn.remove(regex);
     m_currentPassword = password;
-    m_isLoggedIn = false;
-    m_skipCheckAfterLogin = false;
     setLoginError(false);
+    QObject::connect(m_webView, &QQuickWebEngineView::loadingChanged, this, &LoginManager::loadChanged);
     m_loadedHandler = &LoginManager::fillLoginInfo;
-    m_webView->setUrl(QUrl(AUTH_URL));
+
+    if (m_isLoggedIn) {
+        logout();
+    } else {
+        m_webView->setUrl(QUrl(AUTH_URL));
+    }
 }
 
 void LoginManager::logout()
@@ -81,57 +79,32 @@ void LoginManager::fillLoginInfo()
                              "document.querySelector('#password').value = '%2';"
                              "document.querySelector('input[type=submit]').click();")
                     .arg(m_currentSsn, m_currentPassword);
-
-    if (m_skipCheckAfterLogin) {
-        m_loadedHandler = &LoginManager::checkFinalizedSession;
-    } else {
-        m_loadedHandler = &LoginManager::checkAfterLogin;
-    }
-
+    m_loadedHandler = &LoginManager::checkAfterLoginAttempt;
     m_webView->runJavaScript(script);
 }
 
-void LoginManager::checkAfterLogin()
+void LoginManager::checkAfterLoginAttempt()
 {
-//    QString url = m_webView->url().toString();
-
-//    if (url.contains("nfprweb/DoacaoDocumentoFiscalCadastrar")) { // Session Initialized. Finish it.
-//        m_webView->runJavaScript("const btn = document.querySelector('button.button');"
-//                                 "btn.innerText.startsWith('Encerrar') && btn.click()");
-//        m_loadedHandler = &LoginManager::checkFinalizedSession;
-//    } else { // Wrong Login Info. Signalize User.
-//        setLoginError(true);
-//    }
     QJSValue callback = m_engine.evaluate("(function(result) { isSessionInitialized = result; })");
     m_webView->runJavaScript("(function() {"
                              "  const btn = document.querySelector('button.button');"
                              "  if (btn.innerText.startsWith('Encerrar')) {"
-                             "      btn.click();"
                              "      return true;"
                              "  } else {"
                              "      return false;"
                              "  }"
                              "})()", callback);
+
     QTimer::singleShot(500, this, [this]() {
-        qDebug() << m_engine.globalObject().property("isSessionInitialized").toString();
+        if (m_engine.globalObject().property("isSessionInitialized").toBool()) {
+            m_loadedHandler = &LoginManager::fillLoginInfo;
+            m_webView->runJavaScript("document.querySelector('button.button').click()");
+        } else {
+            QObject::disconnect(m_webView, nullptr, this, nullptr);
+            m_engine.globalObject().setProperty("isSessionInitialized", QJSValue(false));
+            m_loadedHandler = nullptr;
+            m_isLoggedIn = true;
+            emit successfullyLoggedIn();
+        }
     });
-}
-
-void LoginManager::checkFinalizedSession()
-{
-    QString url = m_webView->url().toString();
-
-    if (url.contains("authz.identidadedigital.pr.gov.br")) {
-        // We attempt to login in, but a session was already initialized.
-        // At this point we know for sure that the session was finalized by checkAfterLogin()
-        // So we can fill the login info again
-        m_skipCheckAfterLogin = true;
-        fillLoginInfo();
-    } else if (url.contains("nfprweb/ContaCorrente")) {
-        m_skipCheckAfterLogin = false;
-        m_isLoggedIn = true;
-        QObject::disconnect(m_webView, &QQuickWebEngineView::loadingChanged, this, &LoginManager::loadChanged);
-        m_loadedHandler = nullptr;
-        emit successfullyLoggedIn();
-    }
 }
