@@ -39,7 +39,7 @@ ApplicationWindow {
     LoginManager {
         id: loginManager
         webView: webView
-        //onSuccessfullyLoggedIn: donator.prepareForDonations()
+        onSuccessfullyLoggedIn: donator.prepareForDonations()
     }
 
     Donator {

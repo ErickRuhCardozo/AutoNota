@@ -85,6 +85,14 @@ void LoginManager::fillLoginInfo()
 
 void LoginManager::checkAfterLoginAttempt()
 {
+    if (m_webView->url().toString().contains("authz")) {
+        QObject::disconnect(m_webView, nullptr, this, nullptr);
+        m_engine.globalObject().setProperty("isSessionInitialized", QJSValue(false));
+        m_loadedHandler = nullptr;
+        setLoginError(true);
+        return;
+    }
+
     QJSValue callback = m_engine.evaluate("(function(result) { isSessionInitialized = result; })");
     m_webView->runJavaScript("(function() {"
                              "  const btn = document.querySelector('button.button');"
