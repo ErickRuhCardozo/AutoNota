@@ -1,9 +1,13 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QtWebEngineQuick>
+#include <QSqlDatabase>
 
 int main(int argc, char *argv[])
 {
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("app.db");
+
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QtWebEngineQuick::initialize();
     QGuiApplication app(argc, argv);

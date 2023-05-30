@@ -1,9 +1,9 @@
 #include "donator.h"
 
 Donator::Donator(QObject *parent)
-    : QObject{parent}
+    : QObject{parent},
+    m_loadedHandler{nullptr}
 {
-    m_loadedHandler = nullptr;
 }
 
 QQuickWebEngineView *Donator::webView() const
@@ -41,6 +41,11 @@ void Donator::addAccessKey(const QString &accessKey)
     m_accessKeys.enqueue(accessKey);
 }
 
+void Donator::disconnect()
+{
+    QObject::disconnect(m_webView, nullptr, this, nullptr);
+}
+
 void Donator::donate()
 {
     if (m_accessKeys.size() < 1)
@@ -66,24 +71,13 @@ void Donator::prepareForDonations()
 {
     m_loadedHandler = &Donator::checkReadyToDonate;
     QObject::connect(m_webView, &QQuickWebEngineView::loadingChanged, this, &Donator::loadChanged);
-
-    if (!isInDonationPage()) {
-        m_webView->setUrl(QUrl("https://notaparana.pr.gov.br/nfprweb/DoacaoDocumentoFiscalCadastrar"));
-    }
-}
-
-bool Donator::isInDonationPage()
-{
-    QString url = m_webView->url().toString();
-    return url.contains("DoacaoDocumentoFiscalCadastrar");
+    m_webView->setUrl(QUrl("https://notaparana.pr.gov.br/nfprweb/DoacaoDocumentoFiscalCadastrar"));
 }
 
 void Donator::checkReadyToDonate()
 {
-    if (isInDonationPage()) {
         QString script = QString("document.querySelector('#cnpjEntidade').value = '%1';").arg(m_cnpj);
         m_webView->runJavaScript(script);
         m_loadedHandler = &Donator::donate;
         m_webView->runJavaScript("document.querySelector('#btnDoarDocumento').click();");
-    }
 }

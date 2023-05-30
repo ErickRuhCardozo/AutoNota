@@ -5,7 +5,7 @@ project(AutoNota VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick QuickControls2 WebEngineQuick)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick QuickControls2 WebEngineQuick Sql)
 
 qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
@@ -23,12 +23,14 @@ qt_add_qml_module(
             Views/Main.qml
             Views/UsersDialog.qml
             Views/CreateUserDialog.qml
+            Views/SettingsDialog.qml
             Views/AlertBox.qml
         SOURCES
             Models/user.h Models/user.cpp
             ItemModels/usersitemmodel.h ItemModels/usersitemmodel.cpp
             loginmanager.h loginmanager.cpp
             donator.h donator.cpp
+            settingsmanager.h settingsmanager.cpp
 )
 
 qt_add_resources(
@@ -40,6 +42,7 @@ qt_add_resources(
             Assets/Icons/user-minus.svg
             Assets/Icons/user-login.svg
             Assets/Icons/users.svg
+            Assets/Icons/gear.svg
 )
 
 target_include_directories(
@@ -65,6 +68,7 @@ target_link_libraries(
             Qt6::Quick
             Qt6::QuickControls2
             Qt6::WebEngineCore
+            Qt6::Sql
             Qt6::WebEngineQuick
             Qt6::WebEngineQuickPrivate # This mf took me 3 hours... Thanks to: https://forum.qt.io/topic/127489/private-headers-access/6
 )

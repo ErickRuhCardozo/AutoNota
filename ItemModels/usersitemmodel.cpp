@@ -1,16 +1,14 @@
 #include "usersitemmodel.h"
 #include <QFile>
 #include <QDebug>
+#include <QSqlQuery>
 
 const QString UsersItemModel::FILENAME = "users.dat";
 
 UsersItemModel::UsersItemModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    if (!QFile::exists(FILENAME)) {
-        createUsersFile();
-    }
-
+    m_db = QSqlDatabase::database();
     loadUsers();
 }
 
@@ -27,9 +25,6 @@ QVariant UsersItemModel::headerData(int section, Qt::Orientation orientation, in
 
         case 1:
             return "CPF";
-
-        case 2:
-            return "Senha";
 
         default:
             return "";
@@ -49,7 +44,7 @@ int UsersItemModel::columnCount(const QModelIndex &parent) const
     if (parent.isValid())
         return 0;
 
-    return 3;
+    return 2;
 }
 
 QVariant UsersItemModel::data(const QModelIndex &index, int role) const
@@ -137,61 +132,85 @@ void UsersItemModel::addUser(const QString &name, const QString &ssn, const QStr
     user->setSsn(ssn);
     user->setPassword(password);
     m_users.append(user);
+    m_unsavedUsers.append(user);
     endInsertRows();
 }
 
 void UsersItemModel::loadUsers()
 {
-    QFile file(FILENAME);
+//    QFile file(FILENAME);
 
-    if (!file.open(QFile::Text | QFile::ReadOnly)) {
-        qCritical("Could not open %s to read", qUtf8Printable(FILENAME));
+//    if (!file.open(QFile::Text | QFile::ReadOnly)) {
+//        qCritical("Could not open %s to read", qUtf8Printable(FILENAME));
+//        return;
+//    }
+
+//    while (!file.atEnd()) {
+//        QString line = file.readLine();
+//        QStringList values = line.split(',');
+
+//        if (values.size() < 3)
+//                continue;
+
+//        User* user = new User(this);
+//        user->setFullName(values[0]);
+//        user->setSsn(values[1]);
+//        values[2].chop(1);
+//        user->setPassword(values[2]);
+//        m_users.append(user);
+//    }
+    if (!m_db.open()) {
+        qCritical() << "Could not open database to load users";
         return;
     }
 
-    while (!file.atEnd()) {
-        QString line = file.readLine();
-        QStringList values = line.split(',');
+    QSqlQuery query("SELECT id, name, ssn, password FROM users", m_db);
+    query.exec();
 
-        if (values.size() < 3)
-                continue;
-
-        User* user = new User(this);
-        user->setFullName(values[0]);
-        user->setSsn(values[1]);
-        values[2].chop(1);
-        user->setPassword(values[2]);
+    while (query.next()) {
+        User* user = new User();
+        user->setId(query.value(0).toInt());
+        user->setFullName(query.value(1).toString());
+        user->setSsn(query.value(2).toString());
+        user->setPassword(query.value(3).toString());
         m_users.append(user);
     }
+
+    m_db.close();
 }
 
 void UsersItemModel::saveUsers()
 {
-    QFile file(FILENAME);
+//    QFile file(FILENAME);
 
-    if (!file.open(QFile::WriteOnly | QFile::Text | QFile::Truncate)) {
-        qCritical("Could not open %s to write", qUtf8Printable(FILENAME));
+//    if (!file.open(QFile::WriteOnly | QFile::Text | QFile::Truncate)) {
+//        qCritical("Could not open %s to write", qUtf8Printable(FILENAME));
+//        return;
+//    }
+
+//    QStringList lines;
+
+//    for (const User* user : m_users) {
+//        QString line = QString("%1,%2,%3\n").arg(user->fullName(), user->ssn(), user->password());
+//        lines.append(line);
+//    }
+
+//    file.write(lines.join("\n").toUtf8());
+//    file.close();
+    if (!m_db.open()) {
+        qCritical() << "Could not open database to save users";
         return;
     }
 
-    QStringList lines;
+    QSqlQuery query;
+    query.prepare("INSERT INTO users (name, ssn, password) VALUES (?, ?, ?)");
 
-    for (const User* user : m_users) {
-        QString line = QString("%1,%2,%3\n").arg(user->fullName(), user->ssn(), user->password());
-        lines.append(line);
+    for (User* user : qAsConst(m_unsavedUsers)) {
+        query.bindValue(0, user->fullName());
+        query.bindValue(1, user->ssn());
+        query.bindValue(2, user->password());
+        query.exec();
     }
 
-    file.write(lines.join("\n").toUtf8());
-    file.close();
-}
-
-void UsersItemModel::createUsersFile()
-{
-    QFile file(FILENAME);
-
-    if (!file.open(QFile::Text | QFile::ReadWrite)) {
-        qCritical("Could not create users file");
-    }
-
-    file.close();
+    m_db.close();
 }

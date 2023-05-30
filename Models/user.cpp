@@ -6,6 +6,19 @@ User::User(QObject *parent)
 
 }
 
+int User::id() const
+{
+    return m_id;
+}
+
+void User::setId(int newId)
+{
+    if (m_id == newId)
+        return;
+    m_id = newId;
+    emit idChanged();
+}
+
 QString User::fullName() const
 {
     return m_fullName;
@@ -46,4 +59,5 @@ void User::setPassword(const QString &newPassword)
 
     m_password = newPassword;
     emit passwordChanged();
+
 }

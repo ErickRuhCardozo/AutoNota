@@ -26,8 +26,17 @@ ApplicationWindow {
                 onClicked: usersDialogLoader.active = true
             }
 
+            ToolButton {
+                focusPolicy: Qt.NoFocus
+                icon.source: 'qrc:/Assets/Icons/gear.svg'
+                ToolTip.visible: hovered
+                ToolTip.text: 'Configurações'
+                onClicked: settingsDialogLoader.active = true
+            }
+
+            Item { Layout.fillWidth: true }
+
             BusyIndicator {
-                Layout.alignment: Qt.AlignRight
                 Material.accent: Material.Yellow
                 implicitHeight: parent.height
                 visible: webView.loading
@@ -62,6 +71,20 @@ ApplicationWindow {
 
             function onLoginRequested(ssn, password) {
                 loginManager.login(ssn, password)
+            }
+        }
+    }
+
+    Loader {
+        id: settingsDialogLoader
+        source: 'SettingsDialog.qml'
+        active: false
+
+        Connections {
+            target: settingsDialogLoader.item
+
+            function onClosing() {
+                settingsDialogLoader.active = false
             }
         }
     }

@@ -29,6 +29,7 @@ public:
     void setCnpj(const QString &newCnpj);
 
     Q_INVOKABLE void addAccessKey(const QString& accessKey);
+    Q_INVOKABLE void disconnect();
 
 public slots:
     void prepareForDonations();
@@ -46,7 +47,6 @@ private:
     QString m_cnpj;
     QQueue<QString> m_accessKeys;
 
-    bool isInDonationPage();
     void checkReadyToDonate();
     void donate();
 };

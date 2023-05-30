@@ -9,6 +9,7 @@
 #include "qqmlintegration.h"
 #include "../Models/user.h"
 #include <QAbstractTableModel>
+#include <QSqlDatabase>
 
 class UsersItemModel : public QAbstractTableModel
 {
@@ -17,7 +18,8 @@ class UsersItemModel : public QAbstractTableModel
 
 public:
     enum UserRole {
-        NameRole = Qt::UserRole + 1,
+        IdRole = Qt::UserRole + 1,
+        NameRole,
         SsnRole,
         PasswordRole,
         ObjectRole
@@ -37,11 +39,12 @@ public:
     Q_INVOKABLE void addUser(const QString& name, const QString& ssn, const QString& password);
     Q_INVOKABLE void loadUsers();
     Q_INVOKABLE void saveUsers();
-    Q_INVOKABLE void createUsersFile();
 
 private:
     static const QString FILENAME;
     QList<User*> m_users;
+    QList<User*> m_unsavedUsers;
+    QSqlDatabase m_db;
 };
 
 #endif // USERSITEMMODEL_H

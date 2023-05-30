@@ -2,7 +2,7 @@
 #include <QRegularExpression>
 #include <QTimer>
 
-const QString LoginManager::AUTH_URL = "https://notaparana.pr.gov.br/nfprweb/DoacaoDocumentoFiscalCadastrar";
+const QString LoginManager::AUTH_URL = "https://notaparana.pr.gov.br/nfprweb/ContaCorrente";
 
 LoginManager::LoginManager(QObject *parent)
     : QObject{parent},
