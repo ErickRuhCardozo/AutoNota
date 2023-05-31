@@ -39,6 +39,7 @@ public:
     Q_INVOKABLE void addUser(const QString& name, const QString& ssn, const QString& password);
     Q_INVOKABLE void loadUsers();
     Q_INVOKABLE void saveUsers();
+    Q_INVOKABLE const User* getUser(int id);
 
 private:
     static const QString FILENAME;

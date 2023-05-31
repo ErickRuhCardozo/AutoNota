@@ -9,9 +9,7 @@ ApplicationWindow {
     modality: Qt.ApplicationModal
     width: 500
 
-    SettingsManager {
-        id: settings
-    }
+    SettingsManager { id: settings }
 
     GridLayout {
         anchors.fill: parent
@@ -19,12 +17,20 @@ ApplicationWindow {
         columns: 2
 
         Label { text: 'Usuário Padrão:' }
-        ComboBox {
-            Layout.fillWidth: true
-            textRole: 'name'
-            valueRole: 'id'
-            currentIndex: -1
-            model: UsersItemModel { }
+        RowLayout {
+            ComboBox {
+                id: userCombo
+                Layout.fillWidth: true
+                textRole: 'name'
+                valueRole: 'id'
+                model: UsersItemModel { }
+                Component.onCompleted: currentIndex = indexOfValue(settings.defaultUser)
+            }
+
+            ToolButton {
+                icon.source: 'qrc:/Assets/Icons/undo.svg'
+                onClicked: userCombo.currentIndex = -1
+            }
         }
 
         Label { text: 'CNPJ:'; Layout.alignment: Qt.AlignRight }
@@ -50,6 +56,7 @@ ApplicationWindow {
                 text: ' Salvar '
                 onClicked: {
                     settings.cnpj = cnpjField.text
+                    settings.defaultUser = userCombo.currentValue ?? 0
                     dialog.close()
                 }
             }

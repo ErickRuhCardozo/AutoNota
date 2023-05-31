@@ -44,6 +44,7 @@ void LoginManager::setWebView(QQuickWebEngineView *newWebView)
 
 void LoginManager::login(QString ssn, QString password)
 {
+    emit loginRequested();
     static QRegularExpression regex("[^\\d]");
     m_currentSsn = ssn.remove(regex);
     m_currentPassword = password;

@@ -28,21 +28,23 @@ qt_add_qml_module(
         SOURCES
             Models/user.h Models/user.cpp
             ItemModels/usersitemmodel.h ItemModels/usersitemmodel.cpp
-            loginmanager.h loginmanager.cpp
-            donator.h donator.cpp
-            settingsmanager.h settingsmanager.cpp
+            Managers/loginmanager.h Managers/loginmanager.cpp
+            Managers/donationmanager.h Managers/donationmanager.cpp
+            Managers/settingsmanager.h Managers/settingsmanager.cpp
 )
 
 qt_add_resources(
     appAutoNota
         PREFIX "/"
         FILES
-            qtquickcontrols2.conf
+            Assets/qtquickcontrols2.conf
             Assets/Icons/user-plus.svg
             Assets/Icons/user-minus.svg
             Assets/Icons/user-login.svg
             Assets/Icons/users.svg
             Assets/Icons/gear.svg
+            Assets/Icons/undo.svg
+            Assets/app.db
 )
 
 target_include_directories(
@@ -50,6 +52,7 @@ target_include_directories(
         PRIVATE
             Models/
             ItemModels/
+            Managers/
 )
 
 set_target_properties(

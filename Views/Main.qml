@@ -14,6 +14,12 @@ ApplicationWindow {
     height: 450
     visible: true
     title: 'AutoNota - Desenvolvido por Erick Ruh Cardozo'
+    Component.onCompleted: {
+        if (defaultSsn !== '') {
+            loginManager.login(defaultSsn, defaultPassword)
+        }
+    }
+
     header: ToolBar {
         RowLayout {
             anchors.fill: parent
@@ -49,12 +55,13 @@ ApplicationWindow {
         id: loginManager
         webView: webView
         onSuccessfullyLoggedIn: donator.prepareForDonations()
+        onLoginRequested: donator.disconnect()
     }
 
-    Donator {
+    DonationManager {
         id: donator
         webView: webView
-        cnpj: '07.223.960/0001-60'
+        cnpj: entityCnpj
     }
 
     Loader {

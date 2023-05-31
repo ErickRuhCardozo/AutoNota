@@ -35,6 +35,7 @@ signals:
     void webViewChanged();
     void successfullyLoggedIn();
     void hasLoginErrorsChanged();
+    void loginRequested();
 
 private slots:
     void loadChanged(const QWebEngineLoadingInfo& info);

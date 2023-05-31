@@ -1,4 +1,5 @@
 #include "usersitemmodel.h"
+#include <QSqlError>
 #include <QFile>
 #include <QDebug>
 #include <QSqlQuery>
@@ -55,6 +56,9 @@ QVariant UsersItemModel::data(const QModelIndex &index, int role) const
     const User* user = m_users.at(index.row());
 
     switch (role) {
+        case IdRole:
+            return user->id();
+
         case NameRole:
             return user->fullName();
 
@@ -108,18 +112,24 @@ Qt::ItemFlags UsersItemModel::flags(const QModelIndex &index) const
 QHash<int, QByteArray> UsersItemModel::roleNames() const
 {
     return {
+        { IdRole, "id" },
         { NameRole, "name" },
         { SsnRole, "ssn" },
         { PasswordRole, "password" },
-        { ObjectRole, "userObject" }
+        { ObjectRole, "userObject" },
     };
 }
 
 bool UsersItemModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(QModelIndex(), row, row);
+    m_db.open();
+    const User* user = m_users.at(row);
+    QSqlQuery query(QString("DELETE FROM users WHERE id = %1").arg(QString::number(user->id())));
+    query.exec();
     m_users.remove(row);
     endRemoveRows();
+    m_db.close();
     return true;
 }
 
@@ -205,7 +215,7 @@ void UsersItemModel::saveUsers()
     QSqlQuery query;
     query.prepare("INSERT INTO users (name, ssn, password) VALUES (?, ?, ?)");
 
-    for (User* user : qAsConst(m_unsavedUsers)) {
+    for (const User* user : qAsConst(m_unsavedUsers)) {
         query.bindValue(0, user->fullName());
         query.bindValue(1, user->ssn());
         query.bindValue(2, user->password());
@@ -213,4 +223,15 @@ void UsersItemModel::saveUsers()
     }
 
     m_db.close();
+}
+
+const User *UsersItemModel::getUser(int id)
+{
+    for (const User* user : qAsConst(m_users)) {
+        if (user->id() == id) {
+            return user;
+        }
+    }
+
+    return nullptr;
 }
