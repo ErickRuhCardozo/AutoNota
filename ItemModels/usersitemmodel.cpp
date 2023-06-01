@@ -148,27 +148,6 @@ void UsersItemModel::addUser(const QString &name, const QString &ssn, const QStr
 
 void UsersItemModel::loadUsers()
 {
-//    QFile file(FILENAME);
-
-//    if (!file.open(QFile::Text | QFile::ReadOnly)) {
-//        qCritical("Could not open %s to read", qUtf8Printable(FILENAME));
-//        return;
-//    }
-
-//    while (!file.atEnd()) {
-//        QString line = file.readLine();
-//        QStringList values = line.split(',');
-
-//        if (values.size() < 3)
-//                continue;
-
-//        User* user = new User(this);
-//        user->setFullName(values[0]);
-//        user->setSsn(values[1]);
-//        values[2].chop(1);
-//        user->setPassword(values[2]);
-//        m_users.append(user);
-//    }
     if (!m_db.open()) {
         qCritical() << "Could not open database to load users";
         return;
@@ -191,22 +170,9 @@ void UsersItemModel::loadUsers()
 
 void UsersItemModel::saveUsers()
 {
-//    QFile file(FILENAME);
+    if (m_unsavedUsers.size() == 0)
+        return;
 
-//    if (!file.open(QFile::WriteOnly | QFile::Text | QFile::Truncate)) {
-//        qCritical("Could not open %s to write", qUtf8Printable(FILENAME));
-//        return;
-//    }
-
-//    QStringList lines;
-
-//    for (const User* user : m_users) {
-//        QString line = QString("%1,%2,%3\n").arg(user->fullName(), user->ssn(), user->password());
-//        lines.append(line);
-//    }
-
-//    file.write(lines.join("\n").toUtf8());
-//    file.close();
     if (!m_db.open()) {
         qCritical() << "Could not open database to save users";
         return;
@@ -219,7 +185,10 @@ void UsersItemModel::saveUsers()
         query.bindValue(0, user->fullName());
         query.bindValue(1, user->ssn());
         query.bindValue(2, user->password());
-        query.exec();
+
+        if (!query.exec()) {
+            qCritical() << "Error saving user: " << query.lastError().text();
+        }
     }
 
     m_db.close();

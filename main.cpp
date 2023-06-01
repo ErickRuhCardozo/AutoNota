@@ -2,38 +2,58 @@
 #include <QQmlApplicationEngine>
 #include <QtWebEngineQuick>
 #include <QSqlDatabase>
+#include <QFile>
 #include "settingsmanager.h"
 #include "usersitemmodel.h"
 
-int main(int argc, char *argv[])
+bool isFirstRun()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    const QUrl url(u"qrc:/qt/qml/AutoNota/Views/Main.qml"_qs);
-    QString cnpj, ssn, password;
-    int defaultUserId = -1;
+    return !QFile::exists("app.db");
+}
 
-    db.setDatabaseName("app.db");
+void createDatabase()
+{
+    QFile file(":/app.db");
+    file.copy("app.db");
+    QFile::setPermissions("app.db", QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::WriteUser);
+}
 
-    {
-        SettingsManager settings;
-        cnpj = settings.cnpj();
-        defaultUserId = settings.defaultUser();
-    }
+void loadSettings(QString* cnpj, QString* ssn, QString* password)
+{
+    SettingsManager settings;
+    *cnpj = settings.cnpj();
+    int defaultUserId = settings.defaultUser();
 
     if (defaultUserId > 0) {
         UsersItemModel model;
         const User* user = model.getUser(defaultUserId);
 
         if (user != nullptr) {
-            ssn = user->ssn();
-            password = user->password();
+            *ssn = user->ssn();
+            *password = user->password();
         }
     }
+}
+
+int main(int argc, char *argv[])
+{
+    bool firstRun = isFirstRun();
+
+    if (firstRun)
+        createDatabase();
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("app.db");
+    const QUrl url(u"qrc:/qt/qml/AutoNota/Views/Main.qml"_qs);
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QtWebEngineQuick::initialize();
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
+    QString cnpj, ssn, password;
+    engine.rootContext()->setContextProperty("isFirstRun", firstRun);
+    loadSettings(&cnpj, &ssn, &password);
     engine.rootContext()->setContextProperty("entityCnpj", cnpj);
     engine.rootContext()->setContextProperty("defaultSsn", ssn);
     engine.rootContext()->setContextProperty("defaultPassword", password);

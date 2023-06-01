@@ -77,7 +77,6 @@ ApplicationWindow {
                 onClicked: {
                     if (dialog.canSave) {
                         usersModel.addUser(nameField.text, ssnField.text, passwordField.text)
-                        usersModel.saveUsers()
                         dialog.close()
                     } else {
                         errorText.visible = true

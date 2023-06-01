@@ -19,7 +19,7 @@ ApplicationWindow {
     header: ToolBar {
         RowLayout {
             ToolButton {
-                icon.source: 'qrc:/Assets/Icons/user-plus.svg'
+                icon.source: 'qrc:/Icons/user-plus.svg'
                 ToolTip.visible: hovered
                 ToolTip.text: 'Adicionar Usuário'
                 onClicked: {
@@ -30,7 +30,7 @@ ApplicationWindow {
             }
 
             ToolButton {
-                icon.source: 'qrc:/Assets/Icons/user-minus.svg'
+                icon.source: 'qrc:/Icons/user-minus.svg'
                 ToolTip.visible: hovered
                 ToolTip.text: 'Remover Usuário Selecionado'
                 enabled: selectionModel.hasSelection
@@ -41,7 +41,7 @@ ApplicationWindow {
             }
 
             ToolButton {
-                icon.source: 'qrc:/Assets/Icons/user-login.svg'
+                icon.source: 'qrc:/Icons/user-login.svg'
                 ToolTip.visible: hovered
                 ToolTip.text: 'Logar Com Usuário Selecionado'
                 enabled: selectionModel.hasSelection

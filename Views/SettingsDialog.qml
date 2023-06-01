@@ -28,7 +28,7 @@ ApplicationWindow {
             }
 
             ToolButton {
-                icon.source: 'qrc:/Assets/Icons/undo.svg'
+                icon.source: 'qrc:/Icons/undo.svg'
                 onClicked: userCombo.currentIndex = -1
             }
         }

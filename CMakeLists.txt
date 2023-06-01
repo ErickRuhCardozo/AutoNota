@@ -36,6 +36,7 @@ qt_add_qml_module(
 qt_add_resources(
     appAutoNota
         PREFIX "/"
+        BASE "Assets"
         FILES
             Assets/qtquickcontrols2.conf
             Assets/Icons/user-plus.svg

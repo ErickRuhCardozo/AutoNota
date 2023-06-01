@@ -15,7 +15,7 @@ ApplicationWindow {
     visible: true
     title: 'AutoNota - Desenvolvido por Erick Ruh Cardozo'
     Component.onCompleted: {
-        if (defaultSsn !== '') {
+        if (!isFirstRun && defaultSsn !== '') {
             loginManager.login(defaultSsn, defaultPassword)
         }
     }
@@ -26,7 +26,7 @@ ApplicationWindow {
 
             ToolButton {
                 focusPolicy: Qt.NoFocus
-                icon.source: 'qrc:/Assets/Icons/users.svg'
+                icon.source: 'qrc:/Icons/users.svg'
                 ToolTip.visible: hovered
                 ToolTip.text: 'Usuários'
                 onClicked: usersDialogLoader.active = true
@@ -34,7 +34,7 @@ ApplicationWindow {
 
             ToolButton {
                 focusPolicy: Qt.NoFocus
-                icon.source: 'qrc:/Assets/Icons/gear.svg'
+                icon.source: 'qrc:/Icons/gear.svg'
                 ToolTip.visible: hovered
                 ToolTip.text: 'Configurações'
                 onClicked: settingsDialogLoader.active = true
@@ -43,7 +43,7 @@ ApplicationWindow {
             Item { Layout.fillWidth: true }
 
             BusyIndicator {
-                Material.accent: Material.Yellow
+                //Material.accent: Material.Yellow
                 implicitHeight: parent.height
                 visible: webView.loading
                 running: webView.loading
@@ -61,7 +61,7 @@ ApplicationWindow {
     DonationManager {
         id: donator
         webView: webView
-        cnpj: entityCnpj
+        cnpj: !isFirstRun ? entityCnpj : ''
     }
 
     Loader {
@@ -124,6 +124,11 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             enabled: false
+            Component.onCompleted: {
+                if (isFirstRun) {
+                    url = Qt.url('https://www.google.com'); // TODO: Change this to a instructions page stored in the resources
+                }
+            }
         }
     }
 }
