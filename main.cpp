@@ -18,7 +18,7 @@ void createDatabase()
     QFile::setPermissions("app.db", QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::WriteUser);
 }
 
-void loadSettings(QString* cnpj, QString* ssn, QString* password)
+void loadSettings(QString* cnpj, QString* userName, QString* ssn, QString* password)
 {
     SettingsManager settings;
     *cnpj = settings.cnpj();
@@ -29,6 +29,7 @@ void loadSettings(QString* cnpj, QString* ssn, QString* password)
         const User* user = model.getUser(defaultUserId);
 
         if (user != nullptr) {
+            *userName = user->fullName();
             *ssn = user->ssn();
             *password = user->password();
         }
@@ -51,10 +52,12 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    QString cnpj, ssn, password;
+    QString cnpj, user, ssn, password;
+    loadSettings(&cnpj, &user, &ssn, &password);
+    app.setWindowIcon(QIcon(":/Icons/app.svg"));
     engine.rootContext()->setContextProperty("isFirstRun", firstRun);
-    loadSettings(&cnpj, &ssn, &password);
     engine.rootContext()->setContextProperty("entityCnpj", cnpj);
+    engine.rootContext()->setContextProperty("defaultUser", user);
     engine.rootContext()->setContextProperty("defaultSsn", ssn);
     engine.rootContext()->setContextProperty("defaultPassword", password);
 

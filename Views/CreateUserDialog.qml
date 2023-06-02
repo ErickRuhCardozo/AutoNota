@@ -14,7 +14,7 @@ ApplicationWindow {
     height: 225
     visible: true
     modality: Qt.ApplicationModal
-    title: 'Criar Novo Usuário'
+    title: 'Criar Novo Usuário | AutoNota'
 
     property var usersModel: undefined
     property bool canSave: nameField.acceptableInput && ssnField.acceptableInput && passwordField.acceptableInput

@@ -10,12 +10,16 @@ import AutoNota
 
 ApplicationWindow {
     id: dialog
-    signal loginRequested(string ssn, string password)
+    signal loginRequested(string user, string ssn, string password)
     width: 500
     height: 350
+    maximumHeight: height
+    maximumWidth: width
+    minimumHeight: height
+    minimumWidth: width
     visible: true
     modality: Qt.ApplicationModal
-    title: 'Usuários Cadastrados'
+    title: 'Usuários Cadastrados | AutoNota'
     header: ToolBar {
         RowLayout {
             ToolButton {
@@ -48,7 +52,7 @@ ApplicationWindow {
                 onClicked: {
                     const index = selectionModel.selectedIndexes[0]
                     const user = usersModel.data(index, UsersItemModel.ObjectRole)
-                    dialog.loginRequested(user.ssn, user.password)
+                    dialog.loginRequested(user.fullName, user.ssn, user.password)
                     dialog.close()
                 }
             }

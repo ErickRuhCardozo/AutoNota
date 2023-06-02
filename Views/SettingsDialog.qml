@@ -7,13 +7,19 @@ ApplicationWindow {
     id: dialog
     visible: true
     modality: Qt.ApplicationModal
-    width: 500
+    width: 450
+    height: 175
+    title: 'Configurações | AutoNota'
+    maximumHeight: height
+    maximumWidth: width
+    minimumHeight: height
+    minimumWidth: width
 
     SettingsManager { id: settings }
 
     GridLayout {
         anchors.fill: parent
-        anchors.margins: 5
+        anchors.margins: 10
         columns: 2
 
         Label { text: 'Usuário Padrão:' }

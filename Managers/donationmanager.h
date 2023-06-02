@@ -45,8 +45,9 @@ private:
     QQuickWebEngineView *m_webView = nullptr;
     QString m_cnpj;
     QQueue<QString> m_accessKeys;
+    bool m_isPrepared;
     void (DonationManager::*m_loadedHandler)();
-    
+
     void donate();
 };
 

@@ -24,7 +24,7 @@ qt_add_qml_module(
             Views/UsersDialog.qml
             Views/CreateUserDialog.qml
             Views/SettingsDialog.qml
-            Views/AlertBox.qml
+            Views/InfoDialog.qml
         SOURCES
             Models/user.h Models/user.cpp
             ItemModels/usersitemmodel.h ItemModels/usersitemmodel.cpp
@@ -45,6 +45,8 @@ qt_add_resources(
             Assets/Icons/users.svg
             Assets/Icons/gear.svg
             Assets/Icons/undo.svg
+            Assets/Icons/info.svg
+            Assets/Icons/app.svg
             Assets/app.db
 )
 

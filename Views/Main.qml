@@ -13,10 +13,10 @@ ApplicationWindow {
     width: 800
     height: 450
     visible: true
-    title: 'AutoNota - Desenvolvido por Erick Ruh Cardozo'
+    title: 'AutoNota | Desenvolvido por Erick Ruh Cardozo'
     Component.onCompleted: {
         if (!isFirstRun && defaultSsn !== '') {
-            loginManager.login(defaultSsn, defaultPassword)
+            loginManager.login(defaultUser, defaultSsn, defaultPassword)
         }
     }
 
@@ -40,10 +40,25 @@ ApplicationWindow {
                 onClicked: settingsDialogLoader.active = true
             }
 
+            ToolButton {
+                focusPolicy: Qt.NoFocus
+                icon.source: 'qrc:/Icons/info.svg'
+                ToolTip.visible: hovered
+                ToolTip.text: 'Sobre'
+                onClicked: infoDialogLoader.active = true
+            }
+
             Item { Layout.fillWidth: true }
 
+            Label {
+                visible: webView.loading
+                text: loginManager.status
+                font.bold: true
+                verticalAlignment: Label.AlignVCenter
+            }
+
             BusyIndicator {
-                //Material.accent: Material.Yellow
+                Material.accent: Material.color(Material.Red, Material.Shade500)
                 implicitHeight: parent.height
                 visible: webView.loading
                 running: webView.loading
@@ -54,8 +69,8 @@ ApplicationWindow {
     LoginManager {
         id: loginManager
         webView: webView
-        onSuccessfullyLoggedIn: donator.prepareForDonations()
         onLoginRequested: donator.disconnect()
+        onSuccessfullyLoggedIn: donator.prepareForDonations()
     }
 
     DonationManager {
@@ -76,8 +91,8 @@ ApplicationWindow {
                 usersDialogLoader.active = false
             }
 
-            function onLoginRequested(ssn, password) {
-                loginManager.login(ssn, password)
+            function onLoginRequested(user, ssn, password) {
+                loginManager.login(user, ssn, password)
             }
         }
     }
@@ -85,6 +100,20 @@ ApplicationWindow {
     Loader {
         id: settingsDialogLoader
         source: 'SettingsDialog.qml'
+        active: false
+
+        Connections {
+            target: settingsDialogLoader.item
+
+            function onClosing() {
+                settingsDialogLoader.active = false
+            }
+        }
+    }
+
+    Loader {
+        id: infoDialogLoader
+        source: 'InfoDialog.qml'
         active: false
 
         Connections {
@@ -114,9 +143,25 @@ ApplicationWindow {
             }
         }
 
-        AlertBox {
+        Rectangle {
+            Layout.fillWidth: true
             visible: loginManager.hasLoginErrors
-            message: '<b>CPF ou Senha Inválidos</b><br>Recomenda-se remover o usuário e cadastra-lo novamente com as informações corretas.'
+            implicitHeight: children[0].implicitHeight
+            color: '#2C0B0E'
+            border.width: 1
+            border.color: '#842029'
+            radius: 5
+
+            Text {
+                anchors.fill: parent
+                padding: 10
+                wrapMode: Text.Wrap
+                color: '#EA868F'
+                text: '<b>CPF ou Senha Inválidos</b><br>Recomenda-se remover o usuário e cadastra-lo novamente com as informações corretas.'
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
         }
 
         WebEngineView {

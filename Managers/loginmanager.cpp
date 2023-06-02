@@ -42,9 +42,23 @@ void LoginManager::setWebView(QQuickWebEngineView *newWebView)
     emit webViewChanged();
 }
 
-void LoginManager::login(QString ssn, QString password)
+QString LoginManager::status() const
+{
+    return m_status;
+}
+
+void LoginManager::setStatus(const QString &newStatus)
+{
+    if (m_status == newStatus)
+        return;
+    m_status = newStatus;
+    emit statusChanged();
+}
+
+void LoginManager::login(QString user, QString ssn, QString password)
 {
     emit loginRequested();
+    setStatus(QString("Logando usuário %1").arg(user));
     static QRegularExpression regex("[^\\d]");
     m_currentSsn = ssn.remove(regex);
     m_currentPassword = password;
@@ -61,6 +75,7 @@ void LoginManager::login(QString ssn, QString password)
 
 void LoginManager::logout()
 {
+    setStatus("Saindo...");
     m_isLoggedIn = false;
     m_webView->runJavaScript("document.querySelector('#user-logout').click()");
 }
@@ -75,7 +90,8 @@ void LoginManager::loadChanged(const QWebEngineLoadingInfo& info)
 }
 
 void LoginManager::fillLoginInfo()
-{    
+{
+    setStatus("Preenchendo informações de login");
     QString script = QString("document.querySelector('#attribute').value = '%1';"
                              "document.querySelector('#password').value = '%2';"
                              "document.querySelector('input[type=submit]').click();")
@@ -87,6 +103,7 @@ void LoginManager::fillLoginInfo()
 void LoginManager::checkAfterLoginAttempt()
 {
     if (m_webView->url().toString().contains("authz")) {
+        setStatus("Falha na autenticação");
         QObject::disconnect(m_webView, nullptr, this, nullptr);
         m_engine.globalObject().setProperty("isSessionInitialized", QJSValue(false));
         m_loadedHandler = nullptr;
@@ -106,6 +123,7 @@ void LoginManager::checkAfterLoginAttempt()
 
     QTimer::singleShot(500, this, [this]() {
         if (m_engine.globalObject().property("isSessionInitialized").toBool()) {
+            setStatus("Finalizando Seção Iniciada. Aguarde...");
             m_loadedHandler = &LoginManager::fillLoginInfo;
             m_webView->runJavaScript("document.querySelector('button.button').click()");
         } else {
@@ -113,6 +131,8 @@ void LoginManager::checkAfterLoginAttempt()
             m_engine.globalObject().setProperty("isSessionInitialized", QJSValue(false));
             m_loadedHandler = nullptr;
             m_isLoggedIn = true;
+            setStatus("Logado com sucesso!");
+            QTimer::singleShot(2000, this, [this]() { setStatus(""); });
             emit successfullyLoggedIn();
         }
     });
