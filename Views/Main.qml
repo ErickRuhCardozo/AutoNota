@@ -10,6 +10,7 @@ import QtQuick.Controls
 import AutoNota
 
 ApplicationWindow {
+    id: window
     width: 800
     height: 450
     visible: true
@@ -21,12 +22,16 @@ ApplicationWindow {
     }
 
     header: ToolBar {
+        implicitHeight: 40
+
         RowLayout {
             anchors.fill: parent
 
             ToolButton {
                 focusPolicy: Qt.NoFocus
                 icon.source: 'qrc:/Icons/users.svg'
+                icon.height: 18
+                icon.width: 18
                 ToolTip.visible: hovered
                 ToolTip.text: 'Usuários'
                 onClicked: usersDialogLoader.active = true
@@ -35,6 +40,8 @@ ApplicationWindow {
             ToolButton {
                 focusPolicy: Qt.NoFocus
                 icon.source: 'qrc:/Icons/gear.svg'
+                icon.width: 18
+                icon.height: 18
                 ToolTip.visible: hovered
                 ToolTip.text: 'Configurações'
                 onClicked: settingsDialogLoader.active = true
@@ -43,6 +50,8 @@ ApplicationWindow {
             ToolButton {
                 focusPolicy: Qt.NoFocus
                 icon.source: 'qrc:/Icons/info.svg'
+                icon.width: 18
+                icon.height: 18
                 ToolTip.visible: hovered
                 ToolTip.text: 'Sobre'
                 onClicked: infoDialogLoader.active = true
@@ -63,6 +72,29 @@ ApplicationWindow {
                 visible: webView.loading
                 running: webView.loading
             }
+        }
+    }
+
+    footer: ToolBar {
+        implicitHeight: 20
+
+        RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: 8
+            anchors.rightMargin: 8
+
+            Label { text: 'Escaneadas: ' }
+            Label { text: '0' }
+
+            Item { Layout.fillWidth: true }
+
+            Label { text: 'Doadas: ' }
+            Label { text: '0' }
+
+            Item { Layout.fillWidth: true }
+
+            Label { text: 'Rejeitadas: ' }
+            Label { text: '0' }
         }
     }
 
