@@ -17,6 +17,7 @@ void DonationManager::setWebView(QQuickWebEngineView *newWebView)
     if (m_webView == newWebView)
         return;
     m_webView = newWebView;
+    QObject::connect(m_webView, &QQuickWebEngineView::loadingChanged, this, &DonationManager::loadChanged);
     emit webViewChanged();
 }
 
@@ -44,8 +45,8 @@ void DonationManager::addAccessKey(const QString &accessKey)
 
 void DonationManager::disconnect()
 {
+    m_loadedHandler = nullptr;
     m_isPrepared = false;
-    QObject::disconnect(m_webView, nullptr, this, nullptr);
 }
 
 void DonationManager::donate()
@@ -73,7 +74,6 @@ void DonationManager::loadChanged(const QWebEngineLoadingInfo &info)
 void DonationManager::prepareForDonations()
 {
     m_loadedHandler = &DonationManager::donate;
-    QObject::connect(m_webView, &QQuickWebEngineView::loadingChanged, this, &DonationManager::loadChanged);
     m_webView->setUrl(QUrl("https://notaparana.pr.gov.br/nfprweb/DoacaoDocumentoFiscalCadastrar"));
     m_isPrepared = true;
 }

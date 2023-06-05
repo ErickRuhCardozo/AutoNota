@@ -22,6 +22,16 @@ QQuickWebEngineView *LoginManager::webView() const
     return m_webView;
 }
 
+void LoginManager::setWebView(QQuickWebEngineView *newWebView)
+{
+    if (m_webView == newWebView)
+        return;
+
+    m_webView = newWebView;
+    QObject::connect(m_webView, &QQuickWebEngineView::loadingChanged, this, &LoginManager::loadChanged);
+    emit webViewChanged();
+}
+
 bool LoginManager::hasLoginErrors() const
 {
     return m_hasLoginErrors;
@@ -31,15 +41,6 @@ void LoginManager::setLoginError(bool error)
 {
     m_hasLoginErrors = error;
     emit hasLoginErrorsChanged();
-}
-
-void LoginManager::setWebView(QQuickWebEngineView *newWebView)
-{
-    if (m_webView == newWebView)
-        return;
-
-    m_webView = newWebView;
-    emit webViewChanged();
 }
 
 QString LoginManager::status() const
@@ -63,7 +64,6 @@ void LoginManager::login(QString user, QString ssn, QString password)
     m_currentSsn = ssn.remove(regex);
     m_currentPassword = password;
     setLoginError(false);
-    QObject::connect(m_webView, &QQuickWebEngineView::loadingChanged, this, &LoginManager::loadChanged);
     m_loadedHandler = &LoginManager::fillLoginInfo;
 
     if (m_isLoggedIn) {
@@ -104,8 +104,6 @@ void LoginManager::checkAfterLoginAttempt()
 {
     if (m_webView->url().toString().contains("authz")) {
         setStatus("Falha na autenticação");
-        QObject::disconnect(m_webView, nullptr, this, nullptr);
-        m_engine.globalObject().setProperty("isSessionInitialized", QJSValue(false));
         m_loadedHandler = nullptr;
         setLoginError(true);
         return;
@@ -123,12 +121,10 @@ void LoginManager::checkAfterLoginAttempt()
 
     QTimer::singleShot(500, this, [this]() {
         if (m_engine.globalObject().property("isSessionInitialized").toBool()) {
-            setStatus("Finalizando Seção Iniciada. Aguarde...");
+            setStatus("Finalizando Seção Ativa, aguarde...");
             m_loadedHandler = &LoginManager::fillLoginInfo;
             m_webView->runJavaScript("document.querySelector('button.button').click()");
         } else {
-            QObject::disconnect(m_webView, nullptr, this, nullptr);
-            m_engine.globalObject().setProperty("isSessionInitialized", QJSValue(false));
             m_loadedHandler = nullptr;
             m_isLoggedIn = true;
             setStatus("Logado com sucesso!");
