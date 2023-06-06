@@ -65,9 +65,7 @@ ApplicationWindow {
         anchors.fill: parent
         anchors.margins: 5
 
-        HorizontalHeaderView {
-            syncView: tableView
-        }
+        HorizontalHeaderView { syncView: tableView }
 
         TableView {
             id: tableView
@@ -82,6 +80,7 @@ ApplicationWindow {
             delegate: ItemDelegate {
                 required property int row
                 required property bool selected
+                highlighted: selected
                 text: {
                     switch (model.column) {
                         case 0: return model['name']
@@ -89,7 +88,7 @@ ApplicationWindow {
                         case 2: return model['password']
                     }
                 }
-                highlighted: selected
+
                 onClicked: {
                     selectionModel.clearSelection()
 

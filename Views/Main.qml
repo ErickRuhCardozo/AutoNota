@@ -84,17 +84,17 @@ ApplicationWindow {
             anchors.rightMargin: 8
 
             Label { text: 'Escaneadas: ' }
-            Label { text: '0' }
+            Label { text: donator.scanned }
 
             Item { Layout.fillWidth: true }
 
             Label { text: 'Doadas: ' }
-            Label { text: '0' }
+            Label { text: donator.donated }
 
             Item { Layout.fillWidth: true }
 
             Label { text: 'Rejeitadas: ' }
-            Label { text: '0' }
+            Label { text: donator.rejected }
         }
     }
 
@@ -162,11 +162,14 @@ ApplicationWindow {
         anchors.margins: 5
 
         TextField {
+            // TODO: Test if the current workflow works with the QRCode Readers
             Layout.fillWidth: true
             Layout.topMargin: 5
+            focus: true
             placeholderText: 'Chave de Acesso'
             inputMask: '99999999999999999999999999999999999999999999'
-            focus: true
+            KeyNavigation.tab: this
+            KeyNavigation.backtab: this
             onTextChanged: {
                 if (text.length === 44) {
                     donator.addAccessKey(text)
@@ -200,7 +203,6 @@ ApplicationWindow {
             id: webView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            enabled: false
             Component.onCompleted: {
                 if (isFirstRun) {
                     url = Qt.url('https://www.google.com'); // TODO: Change this to a instructions page stored in the resources
