@@ -17,7 +17,6 @@ ApplicationWindow {
     title: 'Criar Novo Usuário | AutoNota'
 
     property var usersModel: undefined
-    property bool canSave: nameField.acceptableInput && ssnField.acceptableInput && passwordField.acceptableInput
 
     GridLayout {
         id: grid
@@ -49,13 +48,13 @@ ApplicationWindow {
 
         Text {
             id: errorText
-            visible: false
+            visible: true
             Layout.columnSpan: 2
             Layout.fillWidth: true
             font.bold: true
             horizontalAlignment: Text.AlignHCenter
             color: 'red'
-            text: 'Preencha todos os campos corretamente, por favor.'
+            text: usersModel.error
         }
 
         RowLayout {
@@ -75,11 +74,12 @@ ApplicationWindow {
                 text: 'Cadastrar'
 
                 onClicked: {
-                    if (dialog.canSave) {
+                    if (nameField.acceptableInput && ssnField.acceptableInput && passwordField.acceptableInput) {
                         usersModel.addUser(nameField.text, ssnField.text, passwordField.text)
-                        dialog.close()
-                    } else {
-                        errorText.visible = true
+
+                        if (usersModel.error === '') {
+                            dialog.close()
+                        }
                     }
                 }
             }

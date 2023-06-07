@@ -38,9 +38,7 @@ void loadSettings(QString* cnpj, QString* userName, QString* ssn, QString* passw
 
 int main(int argc, char *argv[])
 {
-    bool firstRun = isFirstRun();
-
-    if (firstRun)
+    if (isFirstRun())
         createDatabase();
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
@@ -54,8 +52,12 @@ int main(int argc, char *argv[])
 
     QString cnpj, user, ssn, password;
     loadSettings(&cnpj, &user, &ssn, &password);
+
     app.setWindowIcon(QIcon(":/Icons/app.svg"));
-    engine.rootContext()->setContextProperty("isFirstRun", firstRun);
+    app.setOrganizationName("Erick Ruh Cardozo");
+    app.setOrganizationDomain("github.com/erickruhcardozo");
+    app.setApplicationName("AutoNota");
+
     engine.rootContext()->setContextProperty("entityCnpj", cnpj);
     engine.rootContext()->setContextProperty("defaultUser", user);
     engine.rootContext()->setContextProperty("defaultSsn", ssn);

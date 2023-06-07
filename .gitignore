@@ -1,4 +1,6 @@
 build/
 build/*
+release/
+release/*
 CMakeLists.txt.user
 CMakeLists.txt.user*

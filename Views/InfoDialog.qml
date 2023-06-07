@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     title: 'Informações | AutoNota'
     width: 320
-    height: 150
+    height: 180
     maximumHeight: height
     maximumWidth: width
     minimumHeight: height
@@ -16,6 +16,15 @@ ApplicationWindow {
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 5
+
+        Image {
+            Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: 5
+            source: 'qrc:/Icons/app.svg'
+            smooth: true
+            antialiasing: true
+            sourceSize: Qt.size(50, 50)
+        }
 
         Label {
             Layout.fillWidth: true
@@ -40,7 +49,5 @@ ApplicationWindow {
             horizontalAlignment: Text.AlignHCenter
             onLinkActivated: (link) => Qt.openUrlExternally(link)
         }
-
-        Item { Layout.fillHeight: true }
     }
 }

@@ -5,7 +5,7 @@ project(AutoNota VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick QuickControls2 WebEngineQuick Sql)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick QuickControls2 WebEngineQuick Sql Svg)
 
 qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
@@ -13,6 +13,7 @@ qt_policy(SET QTP0001 NEW)
 qt_add_executable(
     appAutoNota
         main.cpp
+        Assets/autonota.rc
 )
 
 qt_add_qml_module(
@@ -39,14 +40,19 @@ qt_add_resources(
         BASE "Assets"
         FILES
             Assets/qtquickcontrols2.conf
-            Assets/Icons/user-plus.svg
             Assets/Icons/user-minus.svg
             Assets/Icons/user-login.svg
+            Assets/Icons/user-plus.svg
             Assets/Icons/users.svg
             Assets/Icons/gear.svg
             Assets/Icons/undo.svg
             Assets/Icons/info.svg
             Assets/Icons/app.svg
+            Assets/Images/1.png
+            Assets/Images/2.png
+            Assets/Images/3.png
+            Assets/Images/4.png
+            Assets/index.html
             Assets/app.db
 )
 
@@ -61,7 +67,7 @@ target_include_directories(
 set_target_properties(
     appAutoNota
         PROPERTIES
-            MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+            MACOSX_BUNDLE_GUI_IDENTIFIER erickruhcardozo.autonota
             MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
             MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
             MACOSX_BUNDLE TRUE
@@ -75,6 +81,7 @@ target_link_libraries(
             Qt6::QuickControls2
             Qt6::WebEngineCore
             Qt6::Sql
+            Qt6::Svg
             Qt6::WebEngineQuick
             Qt6::WebEngineQuickPrivate # This mf took me 3 hours... Thanks to: https://forum.qt.io/topic/127489/private-headers-access/6
 )

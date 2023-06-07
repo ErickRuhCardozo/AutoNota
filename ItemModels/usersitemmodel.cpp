@@ -4,18 +4,11 @@
 #include <QDebug>
 #include <QSqlQuery>
 
-const QString UsersItemModel::FILENAME = "users.dat";
-
 UsersItemModel::UsersItemModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
     m_db = QSqlDatabase::database();
     loadUsers();
-}
-
-UsersItemModel::~UsersItemModel()
-{
-    saveUsers();
 }
 
 QVariant UsersItemModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -32,7 +25,7 @@ QVariant UsersItemModel::headerData(int section, Qt::Orientation orientation, in
     }
 }
 
-int UsersItemModel::rowCount(const QModelIndex &parent) const
+int UsersItemModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
         return 0;
@@ -40,7 +33,7 @@ int UsersItemModel::rowCount(const QModelIndex &parent) const
     return m_users.size();
 }
 
-int UsersItemModel::columnCount(const QModelIndex &parent) const
+int UsersItemModel::columnCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
         return 0;
@@ -48,7 +41,7 @@ int UsersItemModel::columnCount(const QModelIndex &parent) const
     return 2;
 }
 
-QVariant UsersItemModel::data(const QModelIndex &index, int role) const
+QVariant UsersItemModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -75,7 +68,7 @@ QVariant UsersItemModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool UsersItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool UsersItemModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (data(index, role) != value) {
         User* user = m_users.at(index.row());
@@ -101,7 +94,7 @@ bool UsersItemModel::setData(const QModelIndex &index, const QVariant &value, in
     return false;
 }
 
-Qt::ItemFlags UsersItemModel::flags(const QModelIndex &index) const
+Qt::ItemFlags UsersItemModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
         return Qt::NoItemFlags;
@@ -120,30 +113,54 @@ QHash<int, QByteArray> UsersItemModel::roleNames() const
     };
 }
 
-bool UsersItemModel::removeRows(int row, int count, const QModelIndex &parent)
+bool UsersItemModel::removeRows(int row, int count, const QModelIndex& parent)
 {
+    if (!m_db.open()) {
+        qCritical() << "Could not open db to remove users";
+        return false;
+    }
+
     beginRemoveRows(QModelIndex(), row, row);
-    m_db.open();
     const User* user = m_users.at(row);
     QSqlQuery query(QString("DELETE FROM users WHERE id = %1").arg(QString::number(user->id())));
     query.exec();
     m_users.remove(row);
-    endRemoveRows();
     m_db.close();
+    endRemoveRows();
     return true;
 }
 
-void UsersItemModel::addUser(const QString &name, const QString &ssn, const QString &password)
+void UsersItemModel::addUser(const QString& name, const QString& ssn, const QString& password)
 {
-    const int size = m_users.size();
-    beginInsertRows(QModelIndex(), size, size);
-    User* user = new User(this);
-    user->setFullName(name);
-    user->setSsn(ssn);
-    user->setPassword(password);
-    m_users.append(user);
-    m_unsavedUsers.append(user);
-    endInsertRows();
+    if (!m_db.open()) {
+        qCritical() << "Could not open database to add user";
+        return;
+    }
+
+    QSqlQuery query;
+    query.prepare("INSERT INTO users (name, ssn, password) VALUES (?, ?, ?)");
+    query.bindValue(0, name);
+    query.bindValue(1, ssn);
+    query.bindValue(2, password);
+    bool success = query.exec();
+
+    if (!success) {
+        QString error = processSqlError(query.lastError().text());
+        setError(error);
+    } else {
+        setError("");
+        const int size = m_users.size();
+        beginInsertRows(QModelIndex(), size, size);
+        User* user = new User(this);
+        user->setFullName(name);
+        user->setSsn(ssn);
+        user->setPassword(password);
+        m_users.append(user);
+        m_unsavedUsers.append(user);
+        endInsertRows();
+    }
+
+    m_db.close();
 }
 
 void UsersItemModel::loadUsers()
@@ -168,33 +185,7 @@ void UsersItemModel::loadUsers()
     m_db.close();
 }
 
-void UsersItemModel::saveUsers()
-{
-    if (m_unsavedUsers.size() == 0)
-        return;
-
-    if (!m_db.open()) {
-        qCritical() << "Could not open database to save users";
-        return;
-    }
-
-    QSqlQuery query;
-    query.prepare("INSERT INTO users (name, ssn, password) VALUES (?, ?, ?)");
-
-    for (const User* user : qAsConst(m_unsavedUsers)) {
-        query.bindValue(0, user->fullName());
-        query.bindValue(1, user->ssn());
-        query.bindValue(2, user->password());
-
-        if (!query.exec()) {
-            qCritical() << "Error saving user: " << query.lastError().text();
-        }
-    }
-
-    m_db.close();
-}
-
-const User *UsersItemModel::getUser(int id)
+const User* UsersItemModel::getUser(int id)
 {
     for (const User* user : qAsConst(m_users)) {
         if (user->id() == id) {
@@ -203,4 +194,32 @@ const User *UsersItemModel::getUser(int id)
     }
 
     return nullptr;
+}
+
+QString UsersItemModel::error() const
+{
+    return m_error;
+}
+
+void UsersItemModel::setError(const QString& newerror)
+{
+    if (m_error == newerror)
+        return;
+
+    m_error = newerror;
+    emit errorChanged();
+    emit errorOcurred();
+}
+
+QString UsersItemModel::processSqlError(const QString& errorText)
+{
+    if (errorText.contains("UNIQUE")) {
+        if (errorText.contains("users.name")) {
+            return "Nome já cadastrado. Escolha outro.";
+        } else if (errorText.contains("users.ssn")) {
+            return "CPF Já cadastrsado. Escolha outro.";
+        }
+    }
+
+    return QString("Erro Desconhecido: %1").arg(errorText);
 }

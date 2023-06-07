@@ -16,7 +16,7 @@ ApplicationWindow {
     visible: true
     title: 'AutoNota | Desenvolvido por Erick Ruh Cardozo'
     Component.onCompleted: {
-        if (!isFirstRun && defaultSsn !== '') {
+        if (defaultUser !== '' && defaultSsn !== '' && defaultPassword !== '') {
             loginManager.login(defaultUser, defaultSsn, defaultPassword)
         }
     }
@@ -108,7 +108,7 @@ ApplicationWindow {
     DonationManager {
         id: donator
         webView: webView
-        cnpj: !isFirstRun ? entityCnpj : ''
+        cnpj: entityCnpj
     }
 
     Loader {
@@ -170,6 +170,8 @@ ApplicationWindow {
             inputMask: '99999999999999999999999999999999999999999999'
             KeyNavigation.tab: this
             KeyNavigation.backtab: this
+            onCursorPositionChanged: cursorPosition = text.length
+
             onTextChanged: {
                 if (text.length === 44) {
                     donator.addAccessKey(text)
@@ -203,11 +205,7 @@ ApplicationWindow {
             id: webView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Component.onCompleted: {
-                if (isFirstRun) {
-                    url = Qt.url('https://www.google.com'); // TODO: Change this to a instructions page stored in the resources
-                }
-            }
+            url: Qt.url('qrc:/index.html')
         }
     }
 }
