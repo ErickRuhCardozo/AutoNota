@@ -38,10 +38,13 @@ void DonationManager::setCnpj(const QString &newCnpj)
     emit cnpjChanged();
 }
 
-void DonationManager::addAccessKey(const QString &accessKey)
+void DonationManager::addAccessKey(const QString& accessKey)
 {
     if (m_isPrepared && m_accessKeys.size() < 1)
         m_webView->reload();
+
+    if (m_accessKeys.contains(accessKey))
+        return;
 
     m_accessKeys.enqueue(accessKey);
     setScanned(m_scanned + 1);

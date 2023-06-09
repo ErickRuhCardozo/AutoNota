@@ -157,26 +157,35 @@ ApplicationWindow {
         }
     }
 
+    Timer {
+        interval: 5000
+        running: true
+        repeat: true
+        onTriggered: !accessKeyField.focus && accessKeyField.forceActiveFocus()
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 5
 
         TextField {
-            // TODO: Test if the current workflow works with the QRCode Readers
+            id: accessKeyField
             Layout.fillWidth: true
             Layout.topMargin: 5
             focus: true
             placeholderText: 'Chave de Acesso'
-            inputMask: '99999999999999999999999999999999999999999999'
-            KeyNavigation.tab: this
-            KeyNavigation.backtab: this
-            onCursorPositionChanged: cursorPosition = text.length
+            KeyNavigation.tab: accessKeyField
+            KeyNavigation.backtab: accessKeyField
+            onCursorPositionChanged: accessKeyField.cursorPosition = accessKeyField.text.length
+            onEditingFinished: {
+                let regex = /p=(\d{44})/;
 
-            onTextChanged: {
-                if (text.length === 44) {
-                    donator.addAccessKey(text)
-                    clear()
+                if (regex.test(accessKeyField.text)) {
+                    let accessKey = text.match(regex)[1]
+                    donator.addAccessKey(accessKey)
                 }
+
+                accessKeyField.clear()
             }
         }
 
