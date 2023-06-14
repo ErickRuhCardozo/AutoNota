@@ -22,7 +22,7 @@ QQuickWebEngineView *LoginManager::webView() const
     return m_webView;
 }
 
-void LoginManager::setWebView(QQuickWebEngineView *newWebView)
+void LoginManager::setWebView(QQuickWebEngineView* newWebView)
 {
     if (m_webView == newWebView)
         return;
@@ -48,7 +48,7 @@ QString LoginManager::status() const
     return m_status;
 }
 
-void LoginManager::setStatus(const QString &newStatus)
+void LoginManager::setStatus(const QString& newStatus)
 {
     if (m_status == newStatus)
         return;
@@ -56,12 +56,13 @@ void LoginManager::setStatus(const QString &newStatus)
     emit statusChanged();
 }
 
-void LoginManager::login(QString user, QString ssn, QString password)
+void LoginManager::login(const QString& user, const QString& ssn, const QString& password)
 {
     emit loginRequested();
     setStatus(QString("Logando usuário %1").arg(user));
     static QRegularExpression regex("[^\\d]");
-    m_currentSsn = ssn.remove(regex);
+    QString unmaskedSsn = ssn;
+    m_currentSsn = unmaskedSsn.remove(regex);
     m_currentPassword = password;
     setLoginError(false);
     m_loadedHandler = &LoginManager::fillLoginInfo;
@@ -128,8 +129,8 @@ void LoginManager::checkAfterLoginAttempt()
             m_loadedHandler = nullptr;
             m_isLoggedIn = true;
             setStatus("Logado com sucesso!");
-            QTimer::singleShot(2000, this, [this]() { setStatus(""); });
             emit successfullyLoggedIn();
+            QTimer::singleShot(2000, this, [this]() { setStatus(""); });
         }
     });
 }

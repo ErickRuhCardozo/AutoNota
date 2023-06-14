@@ -16,6 +16,7 @@ ApplicationWindow {
     visible: true
     title: 'AutoNota | Desenvolvido por Erick Ruh Cardozo'
     Component.onCompleted: {
+        // Context Properties defined in main.cpp
         if (defaultUser !== '' && defaultSsn !== '' && defaultPassword !== '') {
             loginManager.login(defaultUser, defaultSsn, defaultPassword)
         }
@@ -84,31 +85,31 @@ ApplicationWindow {
             anchors.rightMargin: 8
 
             Label { text: 'Escaneadas: ' }
-            Label { text: donator.scanned }
+            Label { text: donationManager.scanned }
 
             Item { Layout.fillWidth: true }
 
             Label { text: 'Doadas: ' }
-            Label { text: donator.donated }
+            Label { text: donationManager.donated }
 
             Item { Layout.fillWidth: true }
 
             Label { text: 'Rejeitadas: ' }
-            Label { text: donator.rejected }
+            Label { text: donationManager.rejected }
         }
     }
 
     LoginManager {
         id: loginManager
         webView: webView
-        onLoginRequested: donator.disconnect()
-        onSuccessfullyLoggedIn: donator.prepareForDonations()
+        onLoginRequested: donationManager.disconnect()
+        onSuccessfullyLoggedIn: donationManager.prepareForDonations()
     }
 
     DonationManager {
-        id: donator
+        id: donationManager
         webView: webView
-        cnpj: entityCnpj
+        cnpj: entityCnpj // Context Property defined in main.cpp
     }
 
     Loader {
@@ -158,7 +159,7 @@ ApplicationWindow {
     }
 
     Timer {
-        interval: 5000
+        interval: 3000
         running: true
         repeat: true
         onTriggered: !accessKeyField.focus && accessKeyField.forceActiveFocus()
@@ -182,7 +183,7 @@ ApplicationWindow {
 
                 if (regex.test(accessKeyField.text)) {
                     let accessKey = text.match(regex)[1]
-                    donator.addAccessKey(accessKey)
+                    donationManager.addAccessKey(accessKey)
                 }
 
                 accessKeyField.clear()

@@ -2,7 +2,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
-SettingsManager::SettingsManager(QObject *parent)
+SettingsManager::SettingsManager(QObject* parent)
     : QObject{parent},
     m_defaultUser{-1}
 {
@@ -20,7 +20,7 @@ QString SettingsManager::cnpj() const
     return m_cnpj;
 }
 
-void SettingsManager::setCnpj(const QString &newCnpj)
+void SettingsManager::setCnpj(const QString& newCnpj)
 {
     if (m_cnpj == newCnpj)
         return;

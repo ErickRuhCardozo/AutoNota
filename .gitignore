@@ -1,6 +1,8 @@
-build/
-build/*
-release/
-release/*
+Debug/
+Debug/*
+Release/
+Release/*
+Profile/
+Profile/*
 CMakeLists.txt.user
 CMakeLists.txt.user*

@@ -23,12 +23,12 @@ class DonationManager : public QObject
     Q_PROPERTY(int rejected READ rejected NOTIFY rejectedChanged)
 
 public:
-    explicit DonationManager(QObject *parent = nullptr);
+    explicit DonationManager(QObject* parent = nullptr);
 
-    QQuickWebEngineView *webView() const;
-    void setWebView(QQuickWebEngineView *newWebView);
+    QQuickWebEngineView* webView() const;
+    void setWebView(QQuickWebEngineView* newWebView);
     QString cnpj() const;
-    void setCnpj(const QString &newCnpj);
+    void setCnpj(const QString& newCnpj);
     int scanned() const;
     int donated() const;
     int rejected() const;
@@ -49,9 +49,9 @@ signals:
     void rejectedChanged();
 
 private:
-    QQuickWebEngineView *m_webView = nullptr;
-    QString m_cnpj;
+    QQuickWebEngineView* m_webView = nullptr;
     QQueue<QString> m_accessKeys;
+    QString m_cnpj;
     int m_scanned;
     int m_donated;
     int m_rejected;

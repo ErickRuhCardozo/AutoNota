@@ -1,6 +1,6 @@
 #include "donationmanager.h"
 
-DonationManager::DonationManager(QObject *parent)
+DonationManager::DonationManager(QObject* parent)
     : QObject{parent},
     m_loadedHandler{nullptr},
     m_isPrepared{false},
@@ -10,12 +10,12 @@ DonationManager::DonationManager(QObject *parent)
 {
 }
 
-QQuickWebEngineView *DonationManager::webView() const
+QQuickWebEngineView* DonationManager::webView() const
 {
     return m_webView;
 }
 
-void DonationManager::setWebView(QQuickWebEngineView *newWebView)
+void DonationManager::setWebView(QQuickWebEngineView* newWebView)
 {
     if (m_webView == newWebView)
         return;
@@ -30,7 +30,7 @@ QString DonationManager::cnpj() const
     return m_cnpj;
 }
 
-void DonationManager::setCnpj(const QString &newCnpj)
+void DonationManager::setCnpj(const QString& newCnpj)
 {
     if (m_cnpj == newCnpj)
         return;

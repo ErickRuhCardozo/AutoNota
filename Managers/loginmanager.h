@@ -21,19 +21,19 @@ class LoginManager : public QObject
     Q_PROPERTY(bool hasLoginErrors READ hasLoginErrors NOTIFY hasLoginErrorsChanged)
 
 public:
-    explicit LoginManager(QObject *parent = nullptr);
+    explicit LoginManager(QObject* parent = nullptr);
     bool isLoggedIn() const;
 
-    QQuickWebEngineView *webView() const;
-    void setWebView(QQuickWebEngineView *newWebView);
+    QQuickWebEngineView* webView() const;
+    void setWebView(QQuickWebEngineView* newWebView);
 
-    Q_INVOKABLE void login(QString user, QString ssn, QString password);
+    Q_INVOKABLE void login(const QString& user, const QString& ssn, const QString& password);
     Q_INVOKABLE void logout();
 
     bool hasLoginErrors() const;
 
     QString status() const;
-    void setStatus(const QString &newStatus);
+    void setStatus(const QString& newStatus);
 
 signals:
     void webViewChanged();
@@ -48,7 +48,7 @@ private slots:
 private:
     static const QString AUTH_URL;
 
-    QQuickWebEngineView *m_webView = nullptr;
+    QQuickWebEngineView* m_webView = nullptr;
     QString m_status;
     QString m_currentSsn;
     QString m_currentPassword;

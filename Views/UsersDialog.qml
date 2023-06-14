@@ -9,8 +9,9 @@ import QtQuick.Controls
 import AutoNota
 
 ApplicationWindow {
-    id: dialog
     signal loginRequested(string user, string ssn, string password)
+
+    id: dialog
     width: 500
     height: 350
     maximumHeight: height
