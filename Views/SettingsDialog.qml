@@ -8,12 +8,13 @@ ApplicationWindow {
     visible: true
     modality: Qt.ApplicationModal
     width: 450
-    height: 175
+    height: entityCnpj === '' ? 200 : 175
     title: 'Configurações | AutoNota'
     maximumHeight: height
     maximumWidth: width
     minimumHeight: height
     minimumWidth: width
+    signal aboutToClose(string cnpj)
 
     SettingsManager { id: settings }
 
@@ -21,6 +22,14 @@ ApplicationWindow {
         anchors.fill: parent
         anchors.margins: 10
         columns: 2
+
+        Label {
+            visible: entityCnpj === ''
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            text: 'Informe o CNPJ da instituíção para onde está doando as notas'
+        }
 
         Label { text: 'Usuário Padrão:' }
         RowLayout {
@@ -45,6 +54,8 @@ ApplicationWindow {
             Layout.fillWidth: true
             inputMask: '99.999.999/9999-99'
             text: settings.cnpj
+            focus: entityCnpj === ''
+            onFocusChanged: cursorPosition = 0
         }
 
         RowLayout {
@@ -63,6 +74,7 @@ ApplicationWindow {
                 onClicked: {
                     settings.cnpj = cnpjField.text
                     settings.defaultUser = userCombo.currentValue ?? 0
+                    dialog.aboutToClose(cnpjField.text)
                     dialog.close()
                 }
             }

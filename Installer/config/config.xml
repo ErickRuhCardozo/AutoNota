@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>AutoNota</Name>
+    <Version>1.0.1</Version>
+    <Title>AutoNota</Title>
+    <Publisher>Erick Ruh Cardozo</Publisher>
+    <ProductUrl>https://github.com/erickruhcardozo/AutoNota</ProductUrl>
+    <InstallerWindowIcon>../../Assets/Icons/app.png</InstallerWindowIcon>
+    <WizardShowPageList>false</WizardShowPageList>
+    <SupportsModify>false</SupportsModify>
+    <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
+    <ControlScript>controller.qs</ControlScript>
+    <!-- Directory name is used in component.xml -->
+    <StartMenuDir>AutoNota</StartMenuDir>
+    <TargetDir>@ApplicationsDir@/AutoNota</TargetDir>
+</Installer>

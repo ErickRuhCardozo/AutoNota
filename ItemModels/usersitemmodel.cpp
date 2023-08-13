@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QSqlQuery>
+#include <QSqlError>
 
 UsersItemModel::UsersItemModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -165,13 +166,20 @@ void UsersItemModel::addUser(const QString& name, const QString& ssn, const QStr
 
 void UsersItemModel::loadUsers()
 {
+    qDebug() << "UsersItemModel::loadUsers()";
+
     if (!m_db.open()) {
         qCritical() << "Could not open database to load users";
+        qCritical() << m_db.lastError().text();
         return;
     }
 
     QSqlQuery query("SELECT id, name, ssn, password FROM users", m_db);
-    query.exec();
+
+    if (!query.exec()) {
+        qCritical() << "Error executing query:";
+        qCritical() << query.lastError().text();
+    }
 
     while (query.next()) {
         User* user = new User();

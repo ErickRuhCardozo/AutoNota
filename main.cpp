@@ -8,18 +8,33 @@
 
 bool isFirstRun()
 {
-    return !QFile::exists("app.db");
+    return !QFile::exists("./app.db");
 }
 
 void createDatabase()
 {
+    qDebug() << "Copying database file from resources to App's directory";
     QFile file(":/app.db");
-    file.copy("app.db");
-    QFile::setPermissions("app.db", QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::WriteUser);
+
+    if (file.copy("./app.db")) {
+        qDebug() << "Database file copied successfully";
+
+        qDebug() << "About to change permissions on database file";
+        bool success = QFile::setPermissions("app.db", QFile::ReadOwner| QFile::WriteOwner | QFile::ReadUser | QFile::WriteUser | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther | QFile::WriteOther);
+
+        if (success) {
+            qDebug() << "Permissions set successfully!";
+        } else {
+            qCritical() << "Could not set permissions on database file.";
+        }
+    } else {
+        qCritical() << "Database file could not be copied!";
+    }
 }
 
 void loadSettings(QString* cnpj, QString* userName, QString* ssn, QString* password)
 {
+    qDebug() << "About to loading App Settings";
     SettingsManager settings;
     *cnpj = settings.cnpj();
     int defaultUserId = settings.defaultUser();
@@ -38,19 +53,21 @@ void loadSettings(QString* cnpj, QString* userName, QString* ssn, QString* passw
 
 int main(int argc, char *argv[])
 {
-    if (isFirstRun())
+    if (isFirstRun()) {
+        qDebug() << "First Run Detected!";
         createDatabase();
+    }
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("app.db");
     const QUrl url(u"qrc:/qt/qml/AutoNota/Views/Main.qml"_qs);
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QtWebEngineQuick::initialize();
     QGuiApplication app(argc, argv);
-    QQmlApplicationEngine engine;
-
+    QQmlApplicationEngine engine;    
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     QString cnpj, user, ssn, password;
+    db.setDatabaseName("./app.db");
+
     loadSettings(&cnpj, &user, &ssn, &password);
 
     app.setWindowIcon(QIcon(":/Icons/app.svg"));

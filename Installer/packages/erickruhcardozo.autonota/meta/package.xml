@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>AutoNota</DisplayName>
+    <Description>Programa de automatização de doações para o Nota Paraná</Description>
+    <Version>1.0.1</Version>
+    <ReleaseDate>2013-08-13</ReleaseDate>
+    <Default>true</Default>
+    <Name>erickruhcardozo.autonota</Name>
+
+</Package>

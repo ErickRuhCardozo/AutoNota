@@ -17,6 +17,10 @@ ApplicationWindow {
     title: 'AutoNota | Desenvolvido por Erick Ruh Cardozo'
     Component.onCompleted: {
         // Context Properties defined in main.cpp
+        if (entityCnpj === '') {
+            settingsDialogLoader.active = true;
+        }
+
         if (defaultUser !== '' && defaultSsn !== '' && defaultPassword !== '') {
             loginManager.login(defaultUser, defaultSsn, defaultPassword)
         }
@@ -138,6 +142,11 @@ ApplicationWindow {
         Connections {
             target: settingsDialogLoader.item
 
+            function onAboutToClose(cnpj) {
+                entityCnpj = cnpj
+                donationManager.cnpj = cnpj
+            }
+
             function onClosing() {
                 settingsDialogLoader.active = false
             }
@@ -179,7 +188,7 @@ ApplicationWindow {
             KeyNavigation.backtab: accessKeyField
             onCursorPositionChanged: accessKeyField.cursorPosition = accessKeyField.text.length
             onEditingFinished: {
-                let regex = /p=(\d{44})/;
+                let regex = /(?:p=)?(\d{44})/;
 
                 if (regex.test(accessKeyField.text)) {
                     let accessKey = text.match(regex)[1]

@@ -6,3 +6,5 @@ Profile/
 Profile/*
 CMakeLists.txt.user
 CMakeLists.txt.user*
+Installer/*.exe
+Installer/packages/erickruhcardozo.autonota/data/*

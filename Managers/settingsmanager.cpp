@@ -30,15 +30,27 @@ void SettingsManager::setCnpj(const QString& newCnpj)
 
 void SettingsManager::loadSettings()
 {
+    qDebug() << "SettingsManager::loadSettings()";
+
     if (!m_db.open()) {
-        qCritical() << "Could not open database to load settings";
+        qCritical() << "Could not open database to load settings:";
+        qCritical() << m_db.lastError().text();
         return;
     }
 
     QSqlQuery cnpjQuery("SELECT value FROM settings WHERE name = 'cnpj'", m_db);
     QSqlQuery userQuery("SELECT value FROM settings WHERE name = 'default_user'", m_db);
-    cnpjQuery.exec();
-    userQuery.exec();
+
+    if (!cnpjQuery.exec()) {
+        qCritical() << "Error executing cnpj query:";
+        qCritical() << cnpjQuery.lastError().text();
+    }
+
+    if (!userQuery.exec()) {
+        qCritical() << "Error executing user query:";
+        qCritical() << userQuery.lastError().text();
+    }
+
     cnpjQuery.next();
     userQuery.next();
     int defaultUserId = userQuery.value(0).toInt();
