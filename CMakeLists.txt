@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(AutoNota VERSION 0.1 LANGUAGES CXX)
+project(AutoNota VERSION 1.0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTORCC ON)
@@ -19,7 +19,7 @@ qt_add_executable(
 qt_add_qml_module(
     appAutoNota
         URI AutoNota
-        VERSION 1.0
+        VERSION 1.0.1
         QML_FILES
             Views/Main.qml
             Views/UsersDialog.qml
