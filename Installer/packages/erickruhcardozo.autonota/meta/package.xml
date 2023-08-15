@@ -6,5 +6,11 @@
     <ReleaseDate>2013-08-13</ReleaseDate>
     <Default>true</Default>
     <Name>erickruhcardozo.autonota</Name>
-
+    <Operations>
+        <Operation name="CreateShortcut">
+            <Argument>@TargetDir@/appAutoNota.exe</Argument>
+            <Argument>@DesktopDir@/AutoNota.lnk</Argument>
+            <Argument>workingDirectory=@TargetDir@</Argument>
+        </Operation>
+        </Operations>
 </Package>

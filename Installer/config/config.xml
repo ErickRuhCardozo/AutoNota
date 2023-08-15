@@ -10,7 +10,6 @@
     <SupportsModify>false</SupportsModify>
     <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
     <ControlScript>controller.qs</ControlScript>
-    <!-- Directory name is used in component.xml -->
     <StartMenuDir>AutoNota</StartMenuDir>
-    <TargetDir>@ApplicationsDir@/AutoNota</TargetDir>
+    <TargetDir>@HomeDir@/AutoNota</TargetDir>
 </Installer>
